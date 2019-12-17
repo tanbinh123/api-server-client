@@ -79,6 +79,7 @@
 import { updateUserInfo } from '@/api/account'
 import store from '@/store'
 export default {
+  name: 'Info',
   data () {
     return {
       form: this.$form.createForm(this),

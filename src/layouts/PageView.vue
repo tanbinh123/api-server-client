@@ -41,7 +41,7 @@
       <div class="page-header-index-wide">
         <slot>
           <!-- keep-alive  -->
-          <router-view ref="content" />
+           <router-view ref="content" />
         </slot>
       </div>
     </div>

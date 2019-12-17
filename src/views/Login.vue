@@ -32,7 +32,7 @@
       </a-form-item>
 
       <a-form-item>
-        <a-checkbox v-decorator="['rememberMe']">自动登录</a-checkbox>
+        <a-checkbox :checked="rememberMe" @change="() => {rememberMe = !rememberMe}">记住账号(7天)</a-checkbox>
         <router-link :to="{ name: 'recover', params: { user: 'aaa'} }" class="forge-password" style="float: right;" >忘记密码</router-link>
       </a-form-item>
 
@@ -52,18 +52,29 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 
 export default {
+  name: 'Login',
   data () {
     return {
-      loginBtn: false,
       loginErrMsg: '',
       form: this.$form.createForm(this),
+      rememberMe: false,
       state: {
         loginBtn: false
       }
+    }
+  },
+  created () {
+    const loginParams = Vue.ls.get('loginParams')
+    if (loginParams) {
+      this.$nextTick(() => {
+        this.form.setFieldsValue(loginParams)
+      })
+      this.rememberMe = true
     }
   },
   methods: {
@@ -79,7 +90,27 @@ export default {
           loginParams.username = values.username
           loginParams.password = values.password
           Login(loginParams)
-            .then((res) => this.afterLogin(res))
+            .then((res) => {
+              if (!res.status) {
+                this.loginErrMsg = res.msg
+                Vue.ls.remove('loginParams')
+                return
+              }
+              // 本地记住账号密码
+              if (this.rememberMe) {
+                Vue.ls.set('loginParams', loginParams, 7 * 24 * 60 * 60 * 1000)
+              } else {
+                Vue.ls.remove('loginParams')
+              }
+              this.loginErrMsg = ''
+              this.$router.push({ path: '/' })
+              setTimeout(() => {
+                this.$notification.success({
+                  message: '欢迎',
+                  description: `${timeFix()}，欢迎回来`
+                })
+              }, 1000)
+            })
             .finally(() => {
               state.loginBtn = false
             })
@@ -89,21 +120,6 @@ export default {
           }, 600)
         }
       })
-    },
-    afterLogin (res) {
-      if (!res.status) {
-        // 认证失败
-        this.loginErrMsg = res.msg
-        return
-      }
-      this.loginErrMsg = ''
-      this.$router.push({ path: '/' })
-      setTimeout(() => {
-        this.$notification.success({
-          message: '欢迎',
-          description: `${timeFix()}，欢迎回来`
-        })
-      }, 1000)
     }
   }
 }

@@ -43,6 +43,7 @@ import { PageView, RouteView } from '@/layouts'
 import { mixinDevice } from '@/utils/mixin.js'
 
 export default {
+  name: 'RouterViewBase',
   components: {
     RouteView,
     PageView

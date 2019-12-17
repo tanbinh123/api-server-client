@@ -1,193 +1,186 @@
 <template>
-  <a-card :bordered="false">
-    <div class="table-page-search-wrapper">
-      <a-form layout="inline">
-        <a-row :gutter="48">
-          <a-col :md="6" :sm="24">
-            <a-form-item label="用户名">
-              <a-input v-model="query.search_LIKE_id" placeholder="请输入用户名"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="6" :sm="24">
-            <a-form-item label="简介">
-              <a-input v-model="query.search_LIKE_intro" placeholder="请输入描述"/>
-            </a-form-item>
-          </a-col>
-          <template v-if="advanced">
+  <div>
+    <a-card v-if="$route.name === 'User'" :bordered="false">
+      <div class="table-page-search-wrapper">
+        <a-form layout="inline">
+          <a-row :gutter="48">
             <a-col :md="6" :sm="24">
-              <a-form-item label="手机号">
-                <a-input v-model="query.search_LIKE_phone" placeholder="请输入手机号"/>
+              <a-form-item label="用户名">
+                <a-input v-model="query.search_LIKE_id" placeholder="请输入用户名"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
-              <a-form-item label="邮箱">
-                <a-input v-model="query.search_LIKE_email" placeholder="请输入邮箱"/>
+              <a-form-item label="简介">
+                <a-input v-model="query.search_LIKE_intro" placeholder="请输入描述"/>
               </a-form-item>
             </a-col>
-          </template>
-          <a-col :md="!advanced && 6 || 24" :sm="24">
-            <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-              <a-button type="primary" @click="handleSearch"> <a-icon type="search" /> 查询</a-button>
-              <a @click="toggleAdvanced" style="margin-left: 8px">
-                {{ advanced ? '收起' : '展开' }}
-                <a-icon :type="advanced ? 'up' : 'down'"/>
-              </a>
-            </span>
-          </a-col>
-        </a-row>
-      </a-form>
-      <a-row :gutter="48">
-        <a-col :span="24">
-          <span class="table-page-search-submitButtons">
-            <a-button v-action:sysRole:add type="primary" @click="handleAdd">  <a-icon type="plus" /> 添加用户</a-button>
-          </span>
-        </a-col>
-      </a-row>
-    </div>
-    <a-table
-      :bordered="false"
-      :columns="columns"
-      :loading="loading"
-      :defaultExpandAllRows="true"
-      :dataSource="data"
-      :pagination="pagination"
-      @change="handleChange"
-      :rowKey="record => record.id" >
-      <span slot="avatar" slot-scope="avatar">
-        <a-avatar
-          :src="`${fileServer}/${avatar}`"
-        />
-      </span>
-      <span slot="action" slot-scope="record">
-        <a-tooltip v-action:sysUser:toggle :title=" record.state==='0'?'启用':'禁用' ">
-          <a-switch :size="rowBtnSize" :checked="record.state === '0'" @change="toggleState(record)" />
-        </a-tooltip>
-        <a-tooltip v-action:sysUser:update title="编辑">
-          <a-button
-            class="rowBtn"
-            shape="circle"
-            icon="edit"
-            :size="rowBtnSize"
-            @click="handleEdit(record)"></a-button>
-        </a-tooltip>
-        <a-tooltip v-action:sysUser:configRoles title="配置角色">
-          <a-button
-            class="rowBtn"
-            shape="circle"
-            icon="skin"
-            :size="rowBtnSize"
-            @click="handleConfigRoles(record.id)"></a-button>
-        </a-tooltip>
-        <a-popconfirm
-          v-action:sysUser:resetPwd
-          placement="left"
-          title="要重置 这个用户的密码吗？"
-          trigger="hover"
-          @confirm="handleResetPwd(record.id)"
-          okText="是"
-          cancelText="否"
-        >
-          <a-button
-            class="rowBtn"
-            shape="circle"
-            icon="redo"
-            :size="rowBtnSize"
-          ></a-button>
-        </a-popconfirm>
-        <a-popconfirm
-          v-action:sysUser:remove
-          placement="left"
-          title="要删除 这条数据吗？"
-          trigger="hover"
-          @confirm="handleRemove(record.id)"
-          okText="是"
-          cancelText="否"
-        >
-          <a-button
-            class="rowBtn"
-            type="danger"
-            shape="circle"
-            icon="delete"
-            :size="rowBtnSize"></a-button>
-        </a-popconfirm>
-      </span>
-    </a-table>
-    <a-modal
-      :visible="modal.visible"
-      :title="modal.title"
-      :confirmLoading="modal.confirmLoading"
-      @cancel="handleModalCancel"
-      @ok="handleModalOk"
-    >
-      <a-form
-        :form="form"
+            <template v-if="advanced">
+              <a-col :md="6" :sm="24">
+                <a-form-item label="手机号">
+                  <a-input v-model="query.search_LIKE_phone" placeholder="请输入手机号"/>
+                </a-form-item>
+              </a-col>
+              <a-col :md="6" :sm="24">
+                <a-form-item label="邮箱">
+                  <a-input v-model="query.search_LIKE_email" placeholder="请输入邮箱"/>
+                </a-form-item>
+              </a-col>
+            </template>
+            <a-col :md="!advanced && 6 || 24" :sm="24">
+              <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
+                <a-button type="primary" icon="search" @click="handleSearch">查询</a-button>
+                <a @click="toggleAdvanced" style="margin-left: 8px">
+                  {{ advanced ? '收起' : '展开' }}
+                  <a-icon :type="advanced ? 'up' : 'down'"/>
+                </a>
+              </span>
+            </a-col>
+          </a-row>
+        </a-form>
+      </div>
+      <div class="table-operator">
+        <a-button v-action:sysRole:add type="primary" @click="handleAdd">  <a-icon type="plus" />新增</a-button>
+      </div>
+      <a-table
+        :bordered="false"
+        :columns="columns"
+        :loading="loading"
+        :defaultExpandAllRows="true"
+        :dataSource="data"
+        :pagination="pagination"
+        @change="handleChange"
+        :rowKey="record => record.id" >
+        <template slot="avatar" slot-scope="avatar">
+          <a-avatar :src="`${fileServer}/${avatar}`"/>
+        </template>
+        <template slot="state" slot-scope="state">
+          <a-badge v-if="state === '0'" status="success" />
+          <a-badge v-else status="error" />
+        </template>
+        <template slot="action" slot-scope="record">
+          <div class="editable-row-operations">
+            <a-tooltip v-action:sysUser:toggle :title=" record.state==='0'?'启用':'禁用' ">
+              <a-switch :size="rowBtnSize" :checked="record.state === '0'" @change="toggleState(record)" />
+            </a-tooltip>
+            <a-button class="rowBtn" :size="rowBtnSize" type="link" v-action:sysUser:update @click="handleEdit(record)">编辑</a-button>
+            <a-button
+              class="rowBtn"
+              type="link"
+              :size="rowBtnSize"
+              v-action:sysUser:configRoles
+              @click="handleConfigRoles(record.id)">配置角色</a-button>
+            <a-popconfirm
+              v-action:sysUser:resetPwd
+              placement="top"
+              title="确定重置此用户密码吗？"
+              trigger="hover"
+              @confirm="handleResetPwd(record.id)"
+              okText="是"
+              cancelText="否"
+            >
+              <a-button
+                class="rowBtn"
+                type="link"
+                :size="rowBtnSize"
+              >重置密码</a-button>
+            </a-popconfirm>
+            <a-popconfirm
+              v-action:sysUser:remove
+              placement="top"
+              title="确定删除此数据吗？"
+              trigger="hover"
+              @confirm="handleRemove(record.id)"
+              okText="是"
+              cancelText="否"
+            >
+              <a-button
+                class="rowBtn"
+                type="link"
+                :size="rowBtnSize">删除</a-button>
+            </a-popconfirm>
+          </div>
+        </template>
+      </a-table>
+      <a-modal
+        :visible="modal.visible"
+        :title="modal.title"
+        :confirmLoading="modal.confirmLoading"
+        @cancel="handleModalCancel"
+        @ok="handleModalOk"
       >
-        <a-form-item
-          label="用户名"
-          v-bind="modal.formItemLayout"
+        <a-form
+          :form="form"
         >
-          <a-input
-            :disabled="modal.mode === 'edit'"
-            v-decorator="['id',{ rules: [{ required: true, message: '请输入用户名!' }]} ]"
-          />
-        </a-form-item>
-        <a-form-item
-          label="头像"
-          v-bind="modal.formItemLayout">
-          <a-upload
-            name="file"
-            accept="image/*"
-            listType="picture-card"
-            class="avatar-uploader"
-            :showUploadList="false"
-            :action="`${fileServer}/file/upload`"
-            :beforeUpload="handleBeforeUpload"
-            @change="handleUploadChange"
+          <a-form-item
+            label="用户名"
+            v-bind="modal.formItemLayout"
           >
-            <img v-if="modal.form.avatarUrl" :src="modal.form.avatarUrl" width="100px" alt="avatar" />
-            <div v-else>
-              <a-icon :type="modal.form.avatarLoading? 'loading' : 'plus'" />
-              <div class="ant-upload-text">上传</div>
-            </div>
-          </a-upload>
-        </a-form-item>
-        <a-form-item
-          label="手机号"
-          v-bind="modal.formItemLayout"
-        >
-          <a-input
-            v-decorator="['phone',{ rules: [{ required: true, message: '请输入手机号!' }]} ]"
-          />
-        </a-form-item>
-        <a-form-item
-          label="邮箱"
-          v-bind="modal.formItemLayout"
-        >
-          <a-input
-            v-decorator="['email',{ rules: [{ required: true, message: '请输入邮箱!' }]} ]"
-          />
-        </a-form-item>
-        <a-form-item
-          label="状态"
-          v-bind="modal.formItemLayout"
-        >
-          <a-radio-group v-decorator="['state',{ rules: [{ required: true, message: '请选择状态!' }]} ]" >
-            <a-radio value="0">启用</a-radio>
-            <a-radio value="1">禁用</a-radio>
-          </a-radio-group>
-        </a-form-item>
-        <a-form-item
-          label="简介"
-          v-bind="modal.formItemLayout"
-        >
-          <a-input
-            type="textarea"
-            v-decorator="['intro']"
-          />
-        </a-form-item>
-      </a-form>
-    </a-modal>
-  </a-card>
+            <a-input
+              :disabled="modal.mode === 'edit'"
+              v-decorator="['id',{ rules: [{ required: true, message: '请输入用户名!' }]} ]"
+            />
+          </a-form-item>
+          <a-form-item
+            label="头像"
+            v-bind="modal.formItemLayout">
+            <a-upload
+              name="file"
+              accept="image/*"
+              listType="picture-card"
+              class="avatar-uploader"
+              :showUploadList="false"
+              :action="`${fileServer}/file/upload`"
+              :beforeUpload="handleBeforeUpload"
+              @change="handleUploadChange"
+            >
+              <img v-if="modal.form.avatarUrl" :src="modal.form.avatarUrl" width="100px" alt="avatar" />
+              <div v-else>
+                <a-icon :type="modal.form.avatarLoading? 'loading' : 'plus'" />
+                <div class="ant-upload-text">上传</div>
+              </div>
+            </a-upload>
+          </a-form-item>
+          <a-form-item
+            label="手机号"
+            v-bind="modal.formItemLayout"
+          >
+            <a-input
+              v-decorator="['phone',{ rules: [{ required: true, message: '请输入手机号!' }]} ]"
+            />
+          </a-form-item>
+          <a-form-item
+            label="邮箱"
+            v-bind="modal.formItemLayout"
+          >
+            <a-input
+              v-decorator="['email',{ rules: [{ required: true, message: '请输入邮箱!' }]} ]"
+            />
+          </a-form-item>
+          <a-form-item
+            label="状态"
+            v-bind="modal.formItemLayout"
+          >
+            <a-radio-group v-decorator="['state',{ rules: [{ required: true, message: '请选择状态!' }]} ]" >
+              <a-radio value="0">启用</a-radio>
+              <a-radio value="1">禁用</a-radio>
+            </a-radio-group>
+          </a-form-item>
+          <a-form-item
+            label="简介"
+            v-bind="modal.formItemLayout"
+          >
+            <a-input
+              type="textarea"
+              v-decorator="['intro']"
+            />
+          </a-form-item>
+        </a-form>
+      </a-modal>
+    </a-card>
+    <transition name="page-transition">
+      <router-view />
+    </transition>
+  </div>
 </template>
 <script>
 import { list, add, update, toggleState, remove, resetPwd } from '@/api/sys/user'
@@ -201,15 +194,18 @@ export default {
   data () {
     return {
       // description: '用户管理',
+      form: this.$form.createForm(this),
       rowBtnSize: 'small',
       loading: false,
       columns: [
+        { title: '状态', dataIndex: 'state', width: '4%', align: 'center', scopedSlots: { customRender: 'state' } },
         { title: '头像', dataIndex: 'avatar', align: 'center', scopedSlots: { customRender: 'avatar' } },
         { title: '用户名', dataIndex: 'id' },
+        { title: '昵称', dataIndex: 'nickname' },
         { title: '简介', dataIndex: 'intro' },
         { title: '电话', dataIndex: 'phone', align: 'left' },
         { title: '邮箱', dataIndex: 'email', align: 'left' },
-        { title: '操作', key: 'action', align: 'right', scopedSlots: { customRender: 'action' } }
+        { title: '操作', key: 'action', scopedSlots: { customRender: 'action' } }
       ],
       data: [],
       advanced: false,
@@ -233,11 +229,17 @@ export default {
       return noEmptyFieldsObj(this.query)
     }
   },
-  beforeCreate () {
-    this.form = this.$form.createForm(this)
-  },
   created () {
     this.loadData()
+  },
+  beforeRouteLeave (to, from, next) {
+    if (to.name !== 'UserConfigRoles') {
+      from.meta.keepAlive = false
+      to.meta.keepAlive = false
+    } else {
+      from.meta.keepAlive = true
+    }
+    next()
   },
   methods: {
     loadData () {

@@ -36,7 +36,7 @@
 import { listLog } from '@/api/account'
 import { noEmptyFieldsObj } from '@/utils/util.curd'
 export default {
-  name: 'Role',
+  name: 'Log',
   data () {
     return {
       rowBtnSize: 'small',

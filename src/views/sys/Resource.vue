@@ -15,18 +15,14 @@
           </a-col>
           <a-col :md="6" :sm="24">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary" @click="handleSearch"> <a-icon type="search" /> 查询</a-button>
+              <a-button type="primary"  icon="search" @click="handleSearch"> 查询</a-button>
             </span>
           </a-col>
         </a-row>
       </a-form>
-      <a-row :gutter="48">
-        <a-col :span="24">
-          <span class="table-page-search-submitButtons">
-            <a-button v-action:sysResource:add type="primary" @click="handleAdd">  <a-icon type="plus" /> 添加资源</a-button>
-          </span>
-        </a-col>
-      </a-row>
+    </div>
+    <div class="table-operator">
+      <a-button v-action:sysResource:add type="primary" @click="handleAdd">  <a-icon type="plus" />新增</a-button>
     </div>
     <a-table
       :bordered="false"
@@ -37,50 +33,48 @@
       :pagination="pagination"
       @change="handleChange"
       :rowKey="record => record.id" >
-      <span slot="type" slot-scope="type, record">
-        <a-tag v-if="type === 'btn'">按钮</a-tag>
-        <a-tag v-else>菜单</a-tag>
-        <a-tag v-if="record.state === 'ON'">启用</a-tag>
-        <a-tag v-else color="red">禁用</a-tag>
-      </span>
-      <span slot="action" slot-scope="record">
-        <a-tooltip v-action:sysResource:toggle :title=" record.state==='ON'?'启用':'禁用' " >
-          <a-switch :size="rowBtnSize" :checked="record.state === 'ON'" @change="toggleState(record)" />
-        </a-tooltip>
-        <a-tooltip v-if="record.type === 'menu'" v-action:sysResource:add title="添加下级">
+      <template slot="type" slot-scope="type">
+        <template v-if="type === 'btn'">按钮</template>
+        <template v-else>菜单</template>
+      </template>
+      <template slot="state" slot-scope="state">
+        <a-badge v-if="state === 'ON'" status="success" />
+        <a-badge v-else status="error" />
+      </template>
+      <template slot="action" slot-scope="record">
+        <div class="editable-row-operations">
+          <a-tooltip v-action:sysResource:toggle :title=" record.state==='ON'?'启用':'禁用' " >
+            <a-switch :size="rowBtnSize" :checked="record.state === 'ON'" @change="toggleState(record)" />
+          </a-tooltip>
           <a-button
+            v-if="record.type === 'menu'"
+            v-action:sysResource:add
             class="rowBtn"
-            type="primary"
-            shape="circle"
-            icon="plus"
+            type="link"
             :size="rowBtnSize"
-            @click="handleAddChildren(record)"></a-button>
-        </a-tooltip>
-        <a-tooltip v-action:sysResource:update title="编辑">
+            @click="handleAddChildren(record)">添加下级</a-button>
           <a-button
+            v-action:sysResource:update
             class="rowBtn"
-            shape="circle"
-            icon="edit"
+            type="link"
             :size="rowBtnSize"
-            @click="handleEdit(record)"></a-button>
-        </a-tooltip>
-        <a-popconfirm
-          v-action:sysResource:remove
-          placement="left"
-          title="你确定要删除这条数据吗?"
-          trigger="hover"
-          @confirm="handleRemove(record.id)"
-          okText="是"
-          cancelText="否"
-        >
-          <a-button
-            class="rowBtn"
-            type="danger"
-            shape="circle"
-            icon="delete"
-            :size="rowBtnSize"></a-button>
-        </a-popconfirm>
-      </span>
+            @click="handleEdit(record)">编辑</a-button>
+          <a-popconfirm
+            v-action:sysResource:remove
+            placement="top"
+            title="你确定要删除这条数据吗?"
+            trigger="hover"
+            @confirm="handleRemove(record.id)"
+            okText="是"
+            cancelText="否"
+          >
+            <a-button
+              class="rowBtn"
+              type="link"
+              :size="rowBtnSize">删除</a-button>
+          </a-popconfirm>
+        </div>
+      </template>
     </a-table>
     <a-modal
       :visible="modal.visible"
@@ -155,14 +149,16 @@ export default {
   data () {
     return {
       // description: '配置系统资源权限，系统资源分为 菜单 和 按钮, 菜单可以包含按钮。',
+      form: this.$form.createForm(this),
       rowBtnSize: 'small',
       loading: false,
       columns: [
         { title: '资源名称', dataIndex: 'name' },
+        { title: '状态', dataIndex: 'state', width: '4%', align: 'center', scopedSlots: { customRender: 'state' } },
         { title: '权限标识', dataIndex: 'id' },
-        { title: '类型状态', dataIndex: 'type', align: 'center', scopedSlots: { customRender: 'type' } },
-        { title: '排序号', dataIndex: 'sort', align: 'center' },
-        { title: '操作', key: 'action', align: 'right', scopedSlots: { customRender: 'action' } }
+        { title: '类型', dataIndex: 'type', scopedSlots: { customRender: 'type' } },
+        { title: '排序号', dataIndex: 'sort' },
+        { title: '操作', key: 'action', scopedSlots: { customRender: 'action' } }
       ],
       data: [],
       query: {
@@ -186,9 +182,6 @@ export default {
       // 实际生效（向后端）传递的 查询条件
       return noEmptyFieldsObj(this.query)
     }
-  },
-  beforeCreate () {
-    this.form = this.$form.createForm(this)
   },
   created () {
     this.loadData()

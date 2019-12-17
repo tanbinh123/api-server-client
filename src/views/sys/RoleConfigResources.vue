@@ -5,7 +5,7 @@
         <div class="table-page-search-wrapper">
           <a-form layout="inline">
             <a-row :gutter="5">
-              <a-col :xs="20" style="margin-bottom: 10px">
+              <a-col :xs="24" style="margin-bottom: 10px">
                 <template v-if="noResources.selectedRowKeys.length>0">
                   {{ `已选 ${noResources.selectedRowKeys.length} 个资源` }}
                 </template>
@@ -13,8 +13,18 @@
                   选择需要添加的资源
                 </template>
               </a-col>
-              <a-col :xs="4" style="margin-bottom: 10px">
-                <a-tooltip title="添加" placement="bottom">
+              <a-col :xs="18">
+                <a-form-item label="资源">
+                  <a-input v-model="noResources.query.key" placeholder="输入资源筛选"/>
+                </a-form-item>
+              </a-col>
+              <a-col :xs="3">
+                <span class="table-page-search-submitButtons">
+                  <a-button shape="circle" @click="noResourcesHandleSearch"> <a-icon type="search" /></a-button>
+                </span>
+              </a-col>
+              <a-col :xs="3" >
+                <a-tooltip title="添加" placement="top">
                   <a-button
                     shape="circle"
                     icon="plus"
@@ -24,16 +34,6 @@
                     @click="handleAddUserRoles">
                   </a-button>
                 </a-tooltip>
-              </a-col>
-              <a-col :xs="20">
-                <a-form-item label="资源">
-                  <a-input v-model="noResources.query.key" placeholder="输入资源筛选"/>
-                </a-form-item>
-              </a-col>
-              <a-col :xs="4">
-                <span class="table-page-search-submitButtons">
-                  <a-button shape="circle" @click="noResourcesHandleSearch"> <a-icon type="search" /></a-button>
-                </span>
               </a-col>
             </a-row>
           </a-form>
@@ -60,7 +60,7 @@
           <a-form layout="inline">
             <a-row :gutter="10">
               <a-col :xs="12" >
-                <a-tooltip title="移除" placement="bottom">
+                <a-tooltip title="移除" placement="top">
                   <a-button
                     shape="circle"
                     icon="delete"
@@ -109,10 +109,10 @@
 import { detail, listNoResources, listHaveResources, addRoleResources, delRoleResources } from '@/api/sys/role'
 import { noEmptyFieldsObj } from '@/utils/util.curd'
 export default {
-  name: 'UserConfigRoles',
+  name: 'RoleConfigResources',
   data () {
     return {
-      description: '',
+      description: '1',
       defaultSize: 'small',
       role: {
         id: '',
@@ -171,19 +171,22 @@ export default {
       return `${this.role.id} | ${this.role.name} | ${this.role.state === 'ON' ? '启用' : '禁用'}  | ${this.role.intro}`
     }
   },
-  beforeCreate () {
-    this.form = this.$form.createForm(this)
-  },
   created () {
     this.setDescription()
     this.loadRoleInfo()
     this.loadNoRolesData()
     this.loadHaveRolesData()
   },
+  beforeRouteLeave (to, from, next) {
+    next()
+    // 为了每次进入能更新数据，离开时销毁本组件
+    this.$destroy()
+  },
   methods: {
     setDescription () {
       const roleId = this.$route.params.roleId
-      this.description = `设置角色 ${roleId} 的资源，左侧表格为未拥有资源列表， 右侧表格为 已拥有资源列表.`
+      console.log('set')
+      this.description = `设置角色 ${roleId} 的资源，`
     },
     loadRoleInfo () {
       const roleId = this.$route.params.roleId

@@ -5,7 +5,7 @@
         <div class="table-page-search-wrapper">
           <a-form layout="inline">
             <a-row :gutter="5">
-              <a-col :xs="20" style="margin-bottom: 10px">
+              <a-col :xs="24" style="margin-bottom: 10px">
                 <template v-if="noRoles.selectedRowKeys.length>0">
                   {{ `已选 ${noRoles.selectedRowKeys.length} 个角色` }}
                 </template>
@@ -13,8 +13,18 @@
                   选择需要添加的角色
                 </template>
               </a-col>
-              <a-col :xs="4" style="margin-bottom: 10px">
-                <a-tooltip title="添加" placement="bottom">
+              <a-col :xs="18">
+                <a-form-item label="角色">
+                  <a-input v-model="noRoles.query.key" placeholder="输入角色筛选"/>
+                </a-form-item>
+              </a-col>
+              <a-col :xs="3">
+                <span class="table-page-search-submitButtons">
+                  <a-button shape="circle" @click="noRolesHandleSearch"> <a-icon type="search" /></a-button>
+                </span>
+              </a-col>
+              <a-col :xs="3">
+                <a-tooltip title="添加" placement="top">
                   <a-button
                     shape="circle"
                     icon="plus"
@@ -24,16 +34,6 @@
                     @click="handleAddUserRoles">
                   </a-button>
                 </a-tooltip>
-              </a-col>
-              <a-col :xs="20">
-                <a-form-item label="角色">
-                  <a-input v-model="noRoles.query.key" placeholder="输入角色筛选"/>
-                </a-form-item>
-              </a-col>
-              <a-col :xs="4">
-                <span class="table-page-search-submitButtons">
-                  <a-button shape="circle" @click="noRolesHandleSearch"> <a-icon type="search" /></a-button>
-                </span>
               </a-col>
             </a-row>
           </a-form>
@@ -57,7 +57,7 @@
     <a-col :xs="24" :sm="24" :md="17">
       <a-card :loading="user.loading" :bordered="false">
         <a-card-meta>
-          <a slot="title">{{ user.username }}</a>
+          <a slot="title">{{ user.username }} - {{ user.nickname }}</a>
           <a-avatar class="card-avatar" slot="avatar" :src="`${fileServer}/${user.avatar}`" :size="64"/>
           <div class="meta-content" slot="description">
             <a-row>
@@ -75,7 +75,7 @@
           <a-form layout="inline">
             <a-row :gutter="10">
               <a-col :xs="12" >
-                <a-tooltip title="移除" placement="bottom">
+                <a-tooltip title="移除" placement="top">
                   <a-button
                     shape="circle"
                     icon="delete"
@@ -131,6 +131,7 @@ export default {
       defaultSize: 'small',
       user: {
         loading: true,
+        nickname: '',
         username: '',
         avatar: '',
         phone: '',
@@ -184,14 +185,16 @@ export default {
       return noEmptyFieldsObj(this.haveRoles.query)
     }
   },
-  beforeCreate () {
-    this.form = this.$form.createForm(this)
-  },
   created () {
     this.setDescription()
     this.loadUserInfo()
     this.loadNoRolesData()
     this.loadHaveRolesData()
+  },
+  beforeRouteLeave (to, from, next) {
+    next()
+    // 为了每次进入能更新数据，离开时销毁本组件
+    this.$destroy()
   },
   methods: {
     setDescription () {
@@ -207,6 +210,7 @@ export default {
           this.user.email = result.data.email
           this.user.avatar = result.data.avatar
           this.user.intro = result.data.intro
+          this.user.nickname = result.data.nickname
         }
       }).finally(() => {
         this.user.loading = false

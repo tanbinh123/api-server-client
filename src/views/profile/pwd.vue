@@ -49,6 +49,7 @@
 <script>
 import { changePwd } from '@/api/account'
 export default {
+  name: 'Pwd',
   data () {
     return {
       form: this.$form.createForm(this),
