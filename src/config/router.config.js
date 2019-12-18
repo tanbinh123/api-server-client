@@ -98,8 +98,8 @@ export const asyncRouterMap = [
  */
 export const constantRouterMap = [
   {
-    path: '/user',
-    name: 'UserLogin',
+    path: '/account',
+    name: 'Account',
     component: UserLayout,
     redirect: '/login',
     hidden: true,
@@ -107,8 +107,14 @@ export const constantRouterMap = [
       {
         path: '/login',
         name: 'Login',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/Login'),
+        component: () => import(/* webpackChunkName: "login" */ '@/views/Login'),
         meta: { title: '用户登录' }
+      },
+      {
+        path: '/resetPwd',
+        name: 'ResetPwd',
+        component: () => import(/* webpackChunkName: "resetPwd" */ '@/views/ResetPwd'),
+        meta: { title: '重置密码' }
       }
     ]
   },

@@ -57,7 +57,7 @@
     <a-col :xs="24" :sm="24" :md="17">
       <a-card :loading="user.loading" :bordered="false">
         <a-card-meta>
-          <a slot="title">{{ user.username }} - {{ user.nickname }}</a>
+          <a slot="title">{{ user.username }} <tempalte v-if="user.nickname">- {{ user.nickname }}</tempalte></a>
           <a-avatar class="card-avatar" slot="avatar" :src="`${fileServer}/${user.avatar}`" :size="64"/>
           <div class="meta-content" slot="description">
             <a-row>
@@ -127,7 +127,6 @@ export default {
   name: 'UserConfigRoles',
   data () {
     return {
-      description: '',
       defaultSize: 'small',
       user: {
         loading: true,
@@ -186,7 +185,6 @@ export default {
     }
   },
   created () {
-    this.setDescription()
     this.loadUserInfo()
     this.loadNoRolesData()
     this.loadHaveRolesData()
@@ -197,10 +195,6 @@ export default {
     this.$destroy()
   },
   methods: {
-    setDescription () {
-      const userId = this.$route.params.userId
-      this.description = `设置用户 ${userId} 的角色，左侧表格为未拥有角色列表， 右侧表格为 已拥有角色列表.`
-    },
     loadUserInfo () {
       const userId = this.$route.params.userId
       detail(userId).then((result) => {

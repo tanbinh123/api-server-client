@@ -112,7 +112,6 @@ export default {
   name: 'RoleConfigResources',
   data () {
     return {
-      description: '1',
       defaultSize: 'small',
       role: {
         id: '',
@@ -172,7 +171,6 @@ export default {
     }
   },
   created () {
-    this.setDescription()
     this.loadRoleInfo()
     this.loadNoRolesData()
     this.loadHaveRolesData()
@@ -183,11 +181,6 @@ export default {
     this.$destroy()
   },
   methods: {
-    setDescription () {
-      const roleId = this.$route.params.roleId
-      console.log('set')
-      this.description = `设置角色 ${roleId} 的资源，`
-    },
     loadRoleInfo () {
       const roleId = this.$route.params.roleId
       detail(roleId).then((result) => {

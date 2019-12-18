@@ -48,7 +48,7 @@
           >
             <a-input
               v-decorator="['phone',{validateFirst: true, rules: [{ required: true, message: '请输入电话号码!' },
-                                              {pattern: /^[1][3,4,5,6,7,8,9][0-9]{9}$/, message: '请输入格式正确的手机号'}
+                                                                  {pattern: /^[1][3,4,5,6,7,8,9][0-9]{9}$/, message: '请输入格式正确的手机号'}
               ]} ]"
               placeholder="15238002477"/>
           </a-form-item>
@@ -58,7 +58,7 @@
           >
             <a-input
               v-decorator="['email',{validateFirst: true, rules: [{ required: true, message: '请输入电子邮箱地址!' },
-                                              {pattern: /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/, message: '请输入格式正确的邮箱地址'}
+                                                                  {pattern: /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/, message: '请输入格式正确的邮箱地址'}
               ]} ]"
               placeholder="exp@admin.com"/>
           </a-form-item>

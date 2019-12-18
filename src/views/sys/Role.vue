@@ -16,7 +16,7 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <span class="table-page-search-submitButtons">
-                <a-button type="primary"  icon="search" @click="handleSearch"> 查询</a-button>
+                <a-button type="primary" icon="search" @click="handleSearch"> 查询</a-button>
               </span>
             </a-col>
           </a-row>
@@ -131,12 +131,12 @@ export default {
   name: 'Role',
   data () {
     return {
-      // description: '角色管理',
+      description: '',
       form: this.$form.createForm(this),
       rowBtnSize: 'small',
       loading: false,
       columns: [
-        { title: '状态', dataIndex: 'state', width: '4%', align: 'center', scopedSlots: { customRender: 'state' } },
+        { title: '状态', dataIndex: 'state', align: 'center', scopedSlots: { customRender: 'state' } },
         { title: '角色名', dataIndex: 'name' },
         { title: '角色编码', dataIndex: 'id' },
         { title: '介绍', dataIndex: 'intro' },
@@ -156,23 +156,25 @@ export default {
       modal: modalFormSetting()
     }
   },
+  created () {
+    this.loadData()
+  },
   computed: {
     filter () {
       return noEmptyFieldsObj(this.query)
     }
   },
-  created () {
-    this.loadData()
-  },
-  beforeRouteLeave (to, from, next) {
-    if (to.name !== 'RoleConfigResources') {
-      from.meta.keepAlive = false
-      to.meta.keepAlive = false
-    } else {
-      from.meta.keepAlive = true
-      // 目标是当前子组件，keepAlive 同本组件，所以不写 to
+  watch: {
+    $route (to, from) {
+      console.log('Role 页面监听到 子路由变化')
+      // 子路由description 无法更新到 PageView, 所以手动控制
+      if (to.name === 'RoleConfigResources') {
+        this.description = `左侧为 角色 ${to.params.roleId} 未拥有资源，右侧为已拥有资源`
+      }
+      if (to.name === 'User') {
+        this.description = ''
+      }
     }
-    next()
   },
   methods: {
     loadData () {

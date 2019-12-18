@@ -64,7 +64,7 @@ export default {
     handleNewPwd (rule, value, callback) {
       const confirmNewPwd = this.form.getFieldValue('confirmNewPwd')
       if (confirmNewPwd && confirmNewPwd !== value) {
-        callback(new Error('两次密码输入不一致'))
+        callback(new Error('新密码和确认密码不一致'))
       } else {
         callback()
       }
@@ -72,7 +72,7 @@ export default {
     handleConfirmNewPwd (rule, value, callback) {
       const newPwd = this.form.getFieldValue('newPwd')
       if (newPwd && newPwd !== value) {
-        callback(new Error('两次密码输入不一致'))
+        callback(new Error('确认密码和新密码输入不一致'))
       } else {
         callback()
       }

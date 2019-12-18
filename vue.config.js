@@ -35,6 +35,8 @@ const prodExternals = {
 
 // vue.config.js
 const vueConfig = {
+  // 生产环境相对路径，开发环境 绝对路径 （build 后的 css js 等）
+  publicPath: isProd() ? './' : '/',
   configureWebpack: {
     // webpack plugins
     plugins: [

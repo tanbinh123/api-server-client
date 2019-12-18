@@ -33,7 +33,7 @@
 
       <a-form-item>
         <a-checkbox :checked="rememberMe" @change="() => {rememberMe = !rememberMe}">记住账号(7天)</a-checkbox>
-        <router-link :to="{ name: 'recover', params: { user: 'aaa'} }" class="forge-password" style="float: right;" >忘记密码</router-link>
+        <router-link :to="{name: 'ResetPwd'}" class="forge-password" style="float: right;" >忘记密码</router-link>
       </a-form-item>
 
       <a-form-item style="margin-top:24px">

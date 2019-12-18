@@ -15,7 +15,7 @@
           </a-col>
           <a-col :md="6" :sm="24">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary"  icon="search" @click="handleSearch"> 查询</a-button>
+              <a-button type="primary" icon="search" @click="handleSearch"> 查询</a-button>
             </span>
           </a-col>
         </a-row>
@@ -154,7 +154,7 @@ export default {
       loading: false,
       columns: [
         { title: '资源名称', dataIndex: 'name' },
-        { title: '状态', dataIndex: 'state', width: '4%', align: 'center', scopedSlots: { customRender: 'state' } },
+        { title: '状态', dataIndex: 'state', align: 'center', scopedSlots: { customRender: 'state' } },
         { title: '权限标识', dataIndex: 'id' },
         { title: '类型', dataIndex: 'type', scopedSlots: { customRender: 'type' } },
         { title: '排序号', dataIndex: 'sort' },

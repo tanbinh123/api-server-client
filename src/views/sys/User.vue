@@ -193,12 +193,12 @@ export default {
   name: 'User',
   data () {
     return {
-      // description: '用户管理',
+      description: '',
       form: this.$form.createForm(this),
       rowBtnSize: 'small',
       loading: false,
       columns: [
-        { title: '状态', dataIndex: 'state', width: '4%', align: 'center', scopedSlots: { customRender: 'state' } },
+        { title: '状态', dataIndex: 'state', align: 'center', scopedSlots: { customRender: 'state' } },
         { title: '头像', dataIndex: 'avatar', align: 'center', scopedSlots: { customRender: 'avatar' } },
         { title: '用户名', dataIndex: 'id' },
         { title: '昵称', dataIndex: 'nickname' },
@@ -229,17 +229,20 @@ export default {
       return noEmptyFieldsObj(this.query)
     }
   },
+  watch: {
+    $route (to, from) {
+      console.log('User 页面监听到 子路由变化')
+      // 子路由description 无法更新到 PageView, 所以手动控制
+      if (to.name === 'UserConfigRoles') {
+        this.description = `左侧为 用户 ${to.params.userId} 未拥有角色，右侧为已拥有角色`
+      }
+      if (to.name === 'User') {
+        this.description = ''
+      }
+    }
+  },
   created () {
     this.loadData()
-  },
-  beforeRouteLeave (to, from, next) {
-    if (to.name !== 'UserConfigRoles') {
-      from.meta.keepAlive = false
-      to.meta.keepAlive = false
-    } else {
-      from.meta.keepAlive = true
-    }
-    next()
   },
   methods: {
     loadData () {

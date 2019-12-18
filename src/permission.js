@@ -8,7 +8,7 @@ import { setDocumentTitle, domTitle } from '@/utils/domUtil'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 
 NProgress.configure({ showSpinner: false })
-const whiteList = ['Login']
+const whiteList = ['Login', 'ResetPwd']
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
