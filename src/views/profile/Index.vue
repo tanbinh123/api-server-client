@@ -21,7 +21,7 @@
               </router-link>
             </a-menu-item>
             <a-menu-item key="/profile/log">
-              <router-link :to="{ name: 'Log' }">
+              <router-link :to="{ name: 'UserLog' }">
                 操作日志
               </router-link>
             </a-menu-item>

@@ -20,13 +20,13 @@ export const asyncRouterMap = [
             // path 必须配置全路径，否则左侧菜单无法匹配
             path: '/sys/resource',
             name: 'Resource',
-            component: () => import('@/views/sys/Resource'),
+            component: () => import(/* webpackChunkName: "resource" */ '@/views/sys/Resource'),
             meta: { title: '资源管理', icon: 'dashboard', permission: [ 'sysResource' ] }
           },
           {
             path: '/sys/role',
             name: 'Role',
-            component: () => import('@/views/sys/Role'),
+            component: () => import(/* webpackChunkName: "role" */ '@/views/sys/Role'),
             meta: { title: '角色管理', icon: 'skin', permission: [ 'sysRole' ] },
             hideChildrenInMenu: true,
             children: [
@@ -34,7 +34,7 @@ export const asyncRouterMap = [
                 path: '/sys/role/config-resources/:roleId',
                 name: 'RoleConfigResources',
                 hidden: true,
-                component: () => import('@/views/sys/RoleConfigResources'),
+                component: () => import(/* webpackChunkName: "roleConfigResources" */ '@/views/sys/RoleConfigResources'),
                 meta: { title: '配置资源', permission: [ 'sysRole:configResources' ] }
               }
             ]
@@ -42,7 +42,7 @@ export const asyncRouterMap = [
           {
             path: '/sys/user',
             name: 'User',
-            component: () => import('@/views/sys/User'),
+            component: () => import(/* webpackChunkName: "user" */ '@/views/sys/User'),
             meta: { title: '用户管理', icon: 'user', permission: [ 'sysUser' ] },
             hideChildrenInMenu: true,
             children: [
@@ -50,7 +50,7 @@ export const asyncRouterMap = [
                 path: '/sys/user/config-roles/:userId',
                 name: 'UserConfigRoles',
                 hidden: true,
-                component: () => import('@/views/sys/UserConfigRoles'),
+                component: () => import(/* webpackChunkName: "userConfigRoles" */ '@/views/sys/UserConfigRoles'),
                 meta: { title: '配置角色', permission: [ 'sysUser:configRoles' ] }
               }
             ]
@@ -68,19 +68,19 @@ export const asyncRouterMap = [
           {
             path: '/profile/info',
             name: 'InfoSettings',
-            component: () => import('@/views/profile/Info'),
+            component: () => import(/* webpackChunkName: "infoSettings" */ '@/views/profile/Info'),
             meta: { title: '基本信息' }
           },
           {
             path: '/profile/pwd',
             name: 'PwdReset',
-            component: () => import('@/views/profile/pwd'),
+            component: () => import(/* webpackChunkName: "pwdReset" */ '@/views/profile/pwd'),
             meta: { title: '密码重置' }
           },
           {
             path: '/profile/log',
-            name: 'Log',
-            component: () => import('@/views/profile/log'),
+            name: 'UserLog',
+            component: () => import(/* webpackChunkName: "userLog" */ '@/views/profile/log'),
             meta: { title: '操作日志' }
           }
         ]
@@ -121,7 +121,7 @@ export const constantRouterMap = [
   {
     path: '/404',
     name: '404',
-    component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404'),
+    component: () => import(/* webpackChunkName: "404" */ '@/views/exception/404'),
     meta: { title: '404' }
   }
 ]

@@ -38,8 +38,8 @@
           </a-row>
         </a-form>
       </div>
-      <div class="table-operator">
-        <a-button v-action:sysRole:add type="primary" @click="handleAdd">  <a-icon type="plus" />新增</a-button>
+      <div  class="table-operator">
+        <a-button v-action:sysUser:add type="primary" @click="handleAdd">  <a-icon type="plus" />新增</a-button>
       </div>
       <a-table
         :bordered="false"
@@ -126,6 +126,7 @@
             <a-upload
               name="file"
               accept="image/*"
+              :headers="uploadHeaders"
               listType="picture-card"
               class="avatar-uploader"
               :showUploadList="false"
@@ -183,12 +184,15 @@
   </div>
 </template>
 <script>
+import Vue from 'vue'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { list, add, update, toggleState, remove, resetPwd } from '@/api/sys/user'
 import { noEmptyFieldsObj, modalFormSetting } from '@/utils/util.curd'
 const modalSetting = modalFormSetting()
 modalSetting.form.avatar = ''
 modalSetting.form.avatarUrl = null
 modalSetting.form.avatarLoading = false
+
 export default {
   name: 'User',
   data () {
@@ -221,7 +225,10 @@ export default {
         current: 1,
         pageSize: 10
       },
-      modal: modalSetting
+      modal: modalSetting,
+      uploadHeaders: {
+        authorization: Vue.ls.get(ACCESS_TOKEN)
+      }
     }
   },
   computed: {

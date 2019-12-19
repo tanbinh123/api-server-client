@@ -19,6 +19,7 @@
               name="file"
               listType="picture-card"
               class="avatar-uploader"
+              :headers="uploadHeaders"
               :showUploadList="false"
               :action="`${fileServer}/file/upload`"
               :beforeUpload="handleBeforeUpload"
@@ -76,6 +77,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { updateUserInfo } from '@/api/account'
 import store from '@/store'
 export default {
@@ -89,7 +92,10 @@ export default {
       },
       avatarLoading: false,
       btnLoading: false,
-      avatar: ''
+      avatar: '',
+      uploadHeaders: {
+        authorization: Vue.ls.get(ACCESS_TOKEN)
+      }
     }
   },
   created () {
