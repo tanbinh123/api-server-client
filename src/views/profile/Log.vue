@@ -39,7 +39,6 @@ export default {
   name: 'Log',
   data () {
     return {
-      rowBtnSize: 'small',
       loading: false,
       columns: [
         { title: '日志', dataIndex: 'actionName' },

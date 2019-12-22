@@ -4,14 +4,14 @@ import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/lay
 export const asyncRouterMap = [
   {
     path: '/',
-    name: 'index',
+    name: 'Index',
     component: BasicLayout,
     meta: { title: '首页' },
     redirect: '/profile',
     children: [
       {
-        path: '/sys',
-        name: 'system',
+        path: '/permission',
+        name: 'Permission',
         component: PageView,
         meta: { title: '权限管理', icon: 'slack' },
         redirect: '/sys/resource',
@@ -58,9 +58,24 @@ export const asyncRouterMap = [
         ]
       },
       {
+        path: '/manage',
+        name: 'Manage',
+        component: PageView,
+        meta: { title: '系统运维', icon: 'setting' },
+        redirect: '/sys/log',
+        children: [
+          {
+            path: '/sys/log',
+            name: 'Log',
+            component: () => import(/* webpackChunkName: "log" */ '@/views/sys/Log'),
+            meta: { title: '操作日志', icon: 'dashboard', permission: [ 'sysLog' ] }
+          }
+        ]
+      },
+      {
         path: '/profile',
         name: 'Profile',
-        component: () => import('@/views/profile/Index'),
+        component: () => import(/* webpackChunkName: "profile" */'@/views/profile/Index'),
         meta: { title: '个人面板' },
         redirect: '/profile/info',
         hidden: true,
@@ -74,13 +89,13 @@ export const asyncRouterMap = [
           {
             path: '/profile/pwd',
             name: 'PwdReset',
-            component: () => import(/* webpackChunkName: "pwdReset" */ '@/views/profile/pwd'),
+            component: () => import(/* webpackChunkName: "pwdReset" */ '@/views/profile/Pwd'),
             meta: { title: '密码重置' }
           },
           {
             path: '/profile/log',
             name: 'UserLog',
-            component: () => import(/* webpackChunkName: "userLog" */ '@/views/profile/log'),
+            component: () => import(/* webpackChunkName: "userLog" */ '@/views/profile/Log'),
             meta: { title: '操作日志' }
           }
         ]

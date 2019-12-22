@@ -39,7 +39,7 @@
         </a-form>
       </div>
       <div  class="table-operator">
-        <a-button v-action:sysUser:add type="primary" @click="handleAdd">  <a-icon type="plus" />新增</a-button>
+        <a-button v-action:sysUser:add type="primary"  icon="plus"  @click="handleAdd">新增</a-button>
       </div>
       <a-table
         :bordered="false"

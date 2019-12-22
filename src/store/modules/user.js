@@ -93,6 +93,7 @@ const user = {
         commit('SET_ROLES', [])
         commit('SET_RESOURCES', [])
         Vue.ls.remove(ACCESS_TOKEN)
+        Vue.ls.remove('loginParams')
         resolve()
       })
     }

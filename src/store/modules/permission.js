@@ -27,6 +27,10 @@ function filterAsyncRouter (routerMap, permissionList) {
     if (hasPermission(permissionList, route)) {
       if (route.children && route.children.length) {
         route.children = filterAsyncRouter(route.children, permissionList)
+        // 如果不是叶子菜单 且 没有子菜单 （是否有问题？）
+        if (route.children.length === 0 && route.redirect) {
+          return false
+        }
       }
       return true
     }
