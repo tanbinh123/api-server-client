@@ -59,7 +59,7 @@
     <a-modal
       :title="detail.actionName"
       v-model="modalVisible"
-      @ok="handleOk"
+      :footer="null"
     >
       <a-row>
         <a-row :span="24" class="label">Class:</a-row>

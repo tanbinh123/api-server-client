@@ -2,33 +2,35 @@
   <a-card :bordered="false">
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
-        <a-row :gutter="48">
-          <a-col :md="6" :sm="24">
-            <a-form-item label="名称">
-              <a-input v-model="query.search_LIKE_name" placeholder="请输入资源名称"/>
+        <a-row :gutter="20">
+          <a-col :md="4" :sm="24">
+            <a-form-item label="方式">
+              <a-select v-model="query.type" @change="handleTypeChange" >
+                <a-select-option value="LIKE">模糊</a-select-option>
+                <a-select-option value="EQ">精确</a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="24">
-            <a-form-item label="编码">
-              <a-input v-model="query.search_LIKE_id" placeholder="请输入编码"/>
+          <a-col :md="10" :sm="24">
+            <a-form-item :label="query.type==='LIKE'?'名称/编码':'编码'">
+              <a-input v-model="query.key" :placeholder="query.type==='LIKE'?'模糊查找不带层级结构':'精确查找带层级结构'"/>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="24">
-            <span class="table-page-search-submitButtons">
-              <a-button type="primary" icon="search" @click="handleSearch"> 查询</a-button>
-            </span>
+          <a-col :md="4" :sm="24">
+              <span class="table-page-search-submitButtons">
+                <a-button type="primary" icon="search" @click="handleSearch"> 查询</a-button>
+              </span>
           </a-col>
         </a-row>
       </a-form>
     </div>
     <div class="table-operator">
-      <a-button v-action:sysResource:add type="primary"  icon="plus"  @click="handleAdd">新增</a-button>
+      <a-button v-action:sysDict:add type="primary" icon="plus" @click="handleAdd">新增</a-button>
     </div>
     <a-table
       :bordered="false"
       :columns="columns"
       :loading="loading"
-      :defaultExpandAllRows="true"
       :dataSource="data"
       :pagination="pagination"
       @change="handleChange"
@@ -43,24 +45,23 @@
       </template>
       <template slot="action" slot-scope="record">
         <div class="editable-row-operations">
-          <a-tooltip v-action:sysResource:toggle :title=" record.state==='ON'?'启用':'禁用' " >
+          <a-tooltip v-action:sysDict:toggle :title=" record.state==='ON'?'启用':'禁用' " >
             <a-switch :size="rowBtnSize" :checked="record.state === 'ON'" @change="toggleState(record)" />
           </a-tooltip>
           <a-button
-            v-if="record.type === 'menu'"
-            v-action:sysResource:add
+            v-action:sysDict:add
             class="rowBtn"
             type="link"
             :size="rowBtnSize"
             @click="handleAddChildren(record)">添加下级</a-button>
           <a-button
-            v-action:sysResource:update
+            v-action:sysDict:update
             class="rowBtn"
             type="link"
             :size="rowBtnSize"
             @click="handleEdit(record)">编辑</a-button>
           <a-popconfirm
-            v-action:sysResource:remove
+            v-action:sysDict:remove
             placement="top"
             title="你确定要删除这条数据吗?"
             trigger="hover"
@@ -87,30 +88,40 @@
         :form="form"
       >
         <a-form-item
-          label="类型"
+          v-if="modal.mode==='edit'"
+          class="hidden"
+          label="上级组"
           v-bind="modal.formItemLayout"
         >
-          <a-radio-group :disabled="modal.mode === 'edit'" v-decorator="['type',{ rules: [{ required: true, message: '请选择资源类型!' }]} ]" >
-            <a-radio value="menu" :disabled="modal.mode === 'addChildren'">菜单</a-radio>
-            <a-radio value="btn" :disabled="modal.mode === 'add'">按钮</a-radio>
-          </a-radio-group>
+          <a-input v-decorator="['id']"/>
+        </a-form-item>
+        <a-form-item
+          label="上级组"
+          v-bind="modal.formItemLayout"
+        >
+          <a-tree-select
+            showSearch
+            treeNodeFilterProp="title"
+            :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+            :treeData="treeData"
+            v-decorator="['pid',{ rules: [{ required: true, message: '请选择上级组!' }]} ]"
+            placeholder="请选择上级组"
+          >
+          </a-tree-select>
         </a-form-item>
         <a-form-item
           label="名称"
           v-bind="modal.formItemLayout"
         >
           <a-input
-            v-decorator="['name',{ rules: [{ required: true, message: '请输入资源名称!' }]} ]"
+            v-decorator="['name',{ rules: [{ required: true, message: '请输入名称!' }]} ]"
           />
         </a-form-item>
         <a-form-item
-          label="权限编码"
+          label="编码"
           v-bind="modal.formItemLayout"
         >
-          <a-input
-            :disabled="modal.mode === 'edit'"
-            v-decorator="['id',{ rules: [{ required: true, message: '请输入资源权限编码!' }]} ]"
-          />
+          <a-input v-decorator="['code',{ rules: [{ required: true, message: '请输入编码!' }]} ]"/>
         </a-form-item>
         <a-form-item
           label="排序号"
@@ -127,59 +138,49 @@
             <a-radio value="OFF">禁用</a-radio>
           </a-radio-group>
         </a-form-item>
-        <a-form-item
-          label="备注"
-          v-bind="modal.formItemLayout"
-        >
-          <a-input
-            type="textarea"
-            v-decorator="['remark']"
-          />
-        </a-form-item>
       </a-form>
     </a-modal>
   </a-card>
 </template>
 
 <script>
-import { list, add, update, toggleState, remove } from '@/api/sys/resource'
+import { TreeSelect } from 'ant-design-vue'
+import { list, listTreeData, add, update, toggleState, remove } from '@/api/sys/dataDict'
 import { noEmptyFieldsObj, modalFormSetting } from '@/utils/util.curd'
 export default {
-  name: 'Resource',
+  name: 'DataDict',
+  components: {
+    ATreeSelect: TreeSelect
+  },
   data () {
     return {
-      // description: '配置系统资源权限，系统资源分为 菜单 和 按钮, 菜单可以包含按钮。',
       form: this.$form.createForm(this),
       rowBtnSize: 'small',
       loading: false,
       columns: [
-        { title: '资源名称', dataIndex: 'name' },
-        { title: '权限标识', dataIndex: 'id' },
-        { title: '类型', dataIndex: 'type', scopedSlots: { customRender: 'type' } },
+        { title: '名称', dataIndex: 'name' },
+        { title: '编码', dataIndex: 'code' },
         { title: '排序号', dataIndex: 'sort' },
         { title: '状态', dataIndex: 'state', align: 'center', scopedSlots: { customRender: 'state' } },
         { title: '操作', key: 'action', scopedSlots: { customRender: 'action' } }
       ],
       data: [],
+      treeData: [],
       query: {
-        // 查询参数
-        search_LIKE_name: '',
-        search_LIKE_id: ''
+        type: 'LIKE',
+        key: ''
       },
       pagination: {
-        // 表格分页
         showSizeChanger: true,
         total: 0,
         current: 1,
         pageSize: 10
       },
-      // 弹窗，新增、编辑表单
       modal: modalFormSetting()
     }
   },
   computed: {
     filter () {
-      // 实际生效（向后端）传递的 查询条件
       return noEmptyFieldsObj(this.query)
     }
   },
@@ -192,10 +193,6 @@ export default {
       this.loading = true
       const body = {
         filter: this.filter,
-        orders: [
-          { column: 'sort', sort: 'asc' },
-          { column: 'id', sort: 'asc' }
-        ],
         current: this.pagination.current,
         pageSize: this.pagination.pageSize
       }
@@ -208,6 +205,23 @@ export default {
         this.loading = false
       })
     },
+    loadTreeData (currentKey) {
+      listTreeData(currentKey).then((result) => {
+        if (result.status) {
+          this.treeData = [result.data]
+        }
+      }).catch((err) => {
+        console.error(err)
+      })
+    },
+    handleTypeChange (value) {
+      this.query.key = ''
+      if (value === 'LIKE') {
+        this.$message.info('模糊查找不带层级结构')
+      } else {
+        this.$message.info('精确查找带层级结构, 仅能通过编码查询')
+      }
+    },
     handleSearch () {
       this.pagination.current = 1
       this.pagination.total = 0
@@ -218,14 +232,15 @@ export default {
       this.loadData()
     },
     handleAdd () {
-      this.modal.title = '新增资源'
+      this.modal.title = '新增'
       this.modal.mode = 'add'
+      this.loadTreeData()
       this.modal.visible = true
       this.$nextTick(() => {
         this.form.setFieldsValue({
-          type: 'menu',
-          state: 'ON',
-          sort: 1
+          pid: '0',
+          sort: 0,
+          state: 'ON'
         })
       })
     },
@@ -235,28 +250,29 @@ export default {
       })
     },
     handleEdit (record) {
-      this.modal.title = '编辑资源'
+      this.modal.title = '编辑'
       this.modal.mode = 'edit'
+      this.loadTreeData(record.id)
       this.modal.visible = true
       this.$nextTick(() => {
         this.form.setFieldsValue({
           id: record.id,
-          type: record.type,
+          pid: record.pid,
           name: record.name,
+          code: record.code,
           state: record.state,
-          sort: record.sort,
-          remark: record.remark
+          sort: record.sort
         })
       })
     },
     handleAddChildren (record) {
-      this.modal.title = `新增下级按钮`
+      this.modal.title = `新增下级`
       this.modal.mode = 'addChildren'
+      this.loadTreeData()
       this.modal.visible = true
       this.$nextTick(() => {
         this.form.setFieldsValue({
-          id: record.id + ':',
-          type: 'btn',
+          pid: record.id,
           state: 'ON',
           sort: record.children ? record.children[record.children.length - 1].sort + 1 : 0
         })
@@ -273,7 +289,6 @@ export default {
           console.log('Received values of form: ', values)
           this.modal.confirmLoading = true
           if (this.modal.mode === 'add' || this.modal.mode === 'addChildren') {
-            // 增加资源
             add(values).then(this.handleModalOkResult)
           } else if (this.modal.mode === 'edit') {
             update(values.id, values).then(this.handleModalOkResult)

@@ -69,6 +69,12 @@ export const asyncRouterMap = [
             name: 'Log',
             component: () => import(/* webpackChunkName: "log" */ '@/views/sys/Log'),
             meta: { title: '操作日志', icon: 'dashboard', permission: [ 'sysLog' ] }
+          },
+          {
+            path: '/sys/data-dict',
+            name: 'DataDict',
+            component: () => import(/* webpackChunkName: "dataDict" */ '@/views/sys/DataDict'),
+            meta: { title: '数据字典', icon: 'dashboard', permission: [ 'sysLog' ] }
           }
         ]
       },

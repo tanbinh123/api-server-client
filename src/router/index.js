@@ -12,7 +12,7 @@ Router.prototype.push = function push (location, onResolve, onReject) {
 Vue.use(Router)
 
 export default new Router({
-  mode: 'hash', //  默认是 history 可以改为 hash
+  mode: 'history', //  默认是 history 可以改为 hash
   base: process.env.BASE_URL,
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap

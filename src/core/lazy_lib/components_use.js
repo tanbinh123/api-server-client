@@ -23,16 +23,17 @@ import {
   Col,
   Modal,
   Table,
-  Tree,
+  // Tree,
+  // TreeSelect,
   Tabs,
   Icon,
   Badge,
-  Popover,
+  // Popover,
   Dropdown,
   List,
   Avatar,
   Breadcrumb,
-  Steps,
+  // Steps,
   Spin,
   Menu,
   Drawer,
@@ -64,17 +65,18 @@ Vue.use(Form)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Modal)
-Vue.use(Tree)
+// Vue.use(Tree)
+// Vue.use(TreeSelect)
 Vue.use(Table)
 Vue.use(Tabs)
 Vue.use(Icon)
 Vue.use(Badge)
-Vue.use(Popover)
+// Vue.use(Popover)
 Vue.use(Dropdown)
 Vue.use(List)
 Vue.use(Avatar)
 Vue.use(Breadcrumb)
-Vue.use(Steps)
+// Vue.use(Steps)
 Vue.use(Spin)
 Vue.use(Menu)
 Vue.use(Drawer)
