@@ -8,7 +8,8 @@ const api = {
   listLog: '/account/list-log',
   sendEmailCode: '/account/send-email-code',
   sendPhoneCode: '/account/send-phone-code',
-  resetPwd: '/account/reset-password'
+  resetPwd: '/account/reset-password',
+  unreadCount: '/sys/msg/unread-count'
 }
 export function login (data) {
   return axios({
@@ -76,5 +77,13 @@ export function resetPwd (data) {
     url: api.resetPwd,
     method: 'post',
     data: data
+  })
+}
+
+// 删除
+export function unReadCount () {
+  return axios({
+    url: api.unreadCount,
+    method: 'get'
   })
 }

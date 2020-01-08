@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import { login, getInfo } from '@/api/account'
+import { login, getInfo, unReadCount } from '@/api/account'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
-import _ from 'lodash'
+import _omit from 'lodash/omit'
 
 const user = {
   state: {
@@ -12,7 +12,8 @@ const user = {
     avatar: '',
     roles: [],
     resources: [],
-    userInfo: {}
+    userInfo: {},
+    unreadCount: 0 // 未读消息数量
   },
 
   mutations: {
@@ -34,6 +35,9 @@ const user = {
     },
     SET_USERINFO: (state, userInfo) => {
       state.userInfo = userInfo
+    },
+    SET_UNREAD_COUNT: (state, count) => {
+      state.unreadCount = count
     }
   },
 
@@ -70,7 +74,7 @@ const user = {
           // 设置用户信息
           let info = {}
           Object.assign(info, data)
-          info = _.omit(info, ['roles', 'resources'])
+          info = _omit(info, ['roles', 'resources'])
           // console.log('omit info' + JSON.stringify(info))
           commit('SET_USERINFO', info)
 
@@ -96,8 +100,22 @@ const user = {
         Vue.ls.remove('loginParams')
         resolve()
       })
+    },
+    // 未读消息数量
+    getUnreadCount ({ commit }) {
+      return new Promise((resolve, reject) => {
+        console.log('load unread msg count at ' + new Date().toLocaleTimeString())
+        unReadCount().then(response => {
+          if (!response.status) {
+            console.log('获取未读消息数量异常')
+          }
+          commit('SET_UNREAD_COUNT', response.data)
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
     }
-
   }
 }
 

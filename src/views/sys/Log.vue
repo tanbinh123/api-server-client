@@ -1,31 +1,6 @@
 <template>
   <a-card :bordered="false">
-    <div class="table-page-search-wrapper">
-      <a-form layout="inline">
-        <a-row :gutter="48">
-          <a-col :md="6" :sm="24">
-            <a-form-item label="用户">
-              <a-input v-model="query.search_LIKE_username" placeholder="请输入用户名"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="6" :sm="24">
-            <a-form-item label="内容">
-              <a-input v-model="query.search_LIKE_action_name" placeholder="请输入内容"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="6" :sm="24">
-            <a-form-item label="Ip">
-              <a-input v-model="query.search_LIKE_ip" placeholder="请输入Ip"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="6" :sm="24" >
-            <span class="table-page-search-submitButtons">
-              <a-button @click="handleSearch" type="primary" icon="search">查询</a-button>
-            </span>
-          </a-col>
-        </a-row>
-      </a-form>
-    </div>
+    <search-form :searchFields="searchFields" @search="handleSearchEvent"/>
     <div class="table-operator">
       <a-button
         v-action:sysLog:remove
@@ -74,9 +49,12 @@
 </template>
 <script>
 import { list, remove } from '@/api/sys/log'
-import { noEmptyFieldsObj } from '@/utils/util.curd'
+import SearchForm from '@/views/components/SearchForm'
 export default {
   name: 'Log',
+  components: {
+    SearchForm
+  },
   data () {
     return {
       // description: '',
@@ -92,25 +70,21 @@ export default {
         { title: '操作', key: 'ope', scopedSlots: { customRender: 'ope' } }
       ],
       data: [],
-      query: {
-        search_LIKE_username: '',
-        search_LIKE_ip: '',
-        search_LIKE_action_name: ''
-      },
+      searchFields: [
+        { name: '用户名', code: 'search_LIKE_username' },
+        { name: '内容', code: 'search_LIKE_action_name' },
+        { name: 'IP地址', code: 'search_LIKE_ip' }
+      ],
       pagination: {
         showSizeChanger: true,
         total: 0,
         current: 1,
         pageSize: 10
       },
+      filter: {},
       selectedRowKeys: [],
       modalVisible: false,
       detail: {}
-    }
-  },
-  computed: {
-    filter () {
-      return noEmptyFieldsObj(this.query)
     }
   },
   created () {
@@ -137,9 +111,10 @@ export default {
         this.loading = false
       })
     },
-    handleSearch () {
+    handleSearchEvent (filter) {
       this.pagination.current = 1
       this.pagination.total = 0
+      this.filter = filter
       this.loadData()
     },
     handleChange (pagination) {
@@ -164,12 +139,14 @@ export default {
   }
 }
 </script>
-<style>
-  .label {
-    font-weight: 600;
-    padding-bottom: 5px;
-  }
-  .value {
-    padding-bottom: 10px;
+<style lang="less" scoped>
+  .ant-modal-body {
+    .label {
+      font-weight: 600;
+      padding-bottom: 5px;
+    }
+    .value {
+      padding-bottom: 10px;
+    }
   }
 </style>

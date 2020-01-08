@@ -1,5 +1,5 @@
 import T from 'ant-design-vue/es/table/Table'
-import get from 'lodash.get'
+import _get from 'lodash/get'
 
 export default {
   data () {
@@ -209,7 +209,7 @@ export default {
         return {
           ...item,
           total: selectedRows.reduce((sum, val) => {
-            const total = sum + parseInt(get(val, item.dataIndex))
+            const total = sum + parseInt(_get(val, item.dataIndex))
             return isNaN(total) ? 0 : total
           }, 0)
         }

@@ -1,26 +1,6 @@
 <template>
   <a-card :bordered="false">
-    <div class="table-page-search-wrapper">
-      <a-form layout="inline">
-        <a-row :gutter="48">
-          <a-col :md="6" :sm="24">
-            <a-form-item label="名称">
-              <a-input v-model="query.search_LIKE_name" placeholder="请输入资源名称"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="6" :sm="24">
-            <a-form-item label="编码">
-              <a-input v-model="query.search_LIKE_id" placeholder="请输入编码"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="6" :sm="24">
-            <span class="table-page-search-submitButtons">
-              <a-button type="primary" icon="search" @click="handleSearch"> 查询</a-button>
-            </span>
-          </a-col>
-        </a-row>
-      </a-form>
-    </div>
+    <search-form :searchFields="searchFields" @search="handleSearchEvent"/>
     <div class="table-operator">
       <a-button v-action:sysResource:add type="primary"  icon="plus"  @click="handleAdd">新增</a-button>
     </div>
@@ -42,8 +22,8 @@
         <a-badge v-else status="error" />
       </template>
       <template slot="action" slot-scope="record">
-        <div class="editable-row-operations">
-          <a-tooltip v-action:sysResource:toggle :title=" record.state==='ON'?'启用':'禁用' " >
+        <div class="row-operations">
+          <a-tooltip v-action:sysResource:toggle :title="record.state==='ON'?'启用':'禁用' " >
             <a-switch :size="rowBtnSize" :checked="record.state === 'ON'" @change="toggleState(record)" />
           </a-tooltip>
           <a-button
@@ -143,9 +123,13 @@
 
 <script>
 import { list, add, update, toggleState, remove } from '@/api/sys/resource'
-import { noEmptyFieldsObj, modalFormSetting } from '@/utils/util.curd'
+import { modalFormSetting } from '@/utils/util.curd'
+import SearchForm from '@/views/components/SearchForm'
 export default {
   name: 'Resource',
+  components: {
+    SearchForm
+  },
   data () {
     return {
       // description: '配置系统资源权限，系统资源分为 菜单 和 按钮, 菜单可以包含按钮。',
@@ -161,11 +145,10 @@ export default {
         { title: '操作', key: 'action', scopedSlots: { customRender: 'action' } }
       ],
       data: [],
-      query: {
-        // 查询参数
-        search_LIKE_name: '',
-        search_LIKE_id: ''
-      },
+      searchFields: [
+        { name: '资源名称', code: 'search_LIKE_name' },
+        { name: '资源编码', code: 'search_LIKE_id' }
+      ],
       pagination: {
         // 表格分页
         showSizeChanger: true,
@@ -173,14 +156,9 @@ export default {
         current: 1,
         pageSize: 10
       },
+      filter: {},
       // 弹窗，新增、编辑表单
       modal: modalFormSetting()
-    }
-  },
-  computed: {
-    filter () {
-      // 实际生效（向后端）传递的 查询条件
-      return noEmptyFieldsObj(this.query)
     }
   },
   created () {
@@ -208,9 +186,10 @@ export default {
         this.loading = false
       })
     },
-    handleSearch () {
+    handleSearchEvent (filter) {
       this.pagination.current = 1
       this.pagination.total = 0
+      this.filter = filter
       this.loadData()
     },
     handleChange (pagination) {

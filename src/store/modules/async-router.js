@@ -1,7 +1,7 @@
 /**
  * 向后端请求用户的菜单，动态生成路由
  */
-import { constantRouterMap } from '@/config/router.config'
+import { constantRouterMap } from '@/router/router'
 import { generatorDynamicRouter } from '@/router/generator-routers'
 
 const permission = {

@@ -1,124 +1,107 @@
 <template>
   <div>
-    <a-card v-if="$route.name === 'Role'" :bordered="false">
-      <div class="table-page-search-wrapper">
-        <a-form layout="inline">
-          <a-row :gutter="48">
-            <a-col :md="6" :sm="24">
-              <a-form-item label="名称">
-                <a-input v-model="query.search_LIKE_name" placeholder="请输入角色名称"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item label="编码">
-                <a-input v-model="query.search_LIKE_id" placeholder="请输入角色编码"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <span class="table-page-search-submitButtons">
-                <a-button type="primary" icon="search" @click="handleSearch"> 查询</a-button>
-              </span>
-            </a-col>
-          </a-row>
-        </a-form>
-      </div>
-      <div class="table-operator">
-        <a-button v-action:sysRole:add type="primary" icon="plus" @click="handleAdd">新增</a-button>
-      </div>
-      <a-table
-        :bordered="false"
-        :columns="columns"
-        :loading="loading"
-        :dataSource="data"
-        :pagination="pagination"
-        @change="handleChange"
-        :rowKey="record => record.id" >
-        <template slot="state" slot-scope="state">
-          <a-badge v-if="state === 'ON'" status="success" />
-          <a-badge v-else status="error" />
-        </template>
-        <template slot="action" slot-scope="record">
-          <div class="editable-row-operations">
-            <a-tooltip v-action:sysRole:toggle :title=" record.state==='ON'?'启用':'禁用' ">
-              <a-switch :size="rowBtnSize" :checked="record.state === 'ON'" @change="toggleState(record)" />
-            </a-tooltip>
-            <a-button
-              v-action:sysRole:update
-              class="rowBtn"
-              type="link"
-              :size="rowBtnSize"
-              @click="handleEdit(record)">编辑</a-button>
-            <a-button
-              v-action:sysRole:configResources
-              class="rowBtn"
-              type="link"
-              :size="rowBtnSize"
-              @click="handleConfigResources(record.id)">配置资源</a-button>
-            <a-popconfirm
-              v-action:sysRole:remove
-              placement="top"
-              title="你确定要删除这条数据吗?"
-              trigger="hover"
-              @confirm="handleRemove(record.id)"
-              okText="是"
-              cancelText="否"
-            >
+    <!-- 因为页面内有路由跳转到子页面，所以加keep-alive-->
+    <keep-alive>
+      <a-card v-if="$route.name === 'Role'" :bordered="false">
+        <search-form :searchFields="searchFields" @search="handleSearchEvent"/>
+        <div class="table-operator">
+          <a-button v-action:sysRole:add type="primary" icon="plus" @click="handleAdd">新增</a-button>
+        </div>
+        <a-table
+          :bordered="false"
+          :columns="columns"
+          :loading="loading"
+          :dataSource="data"
+          :pagination="pagination"
+          @change="handleChange"
+          :rowKey="record => record.id" >
+          <template slot="state" slot-scope="state">
+            <a-badge v-if="state === 'ON'" status="success" />
+            <a-badge v-else status="error" />
+          </template>
+          <template slot="action" slot-scope="record">
+            <div class="row-operations">
+              <a-tooltip v-action:sysRole:toggle :title=" record.state==='ON'?'启用':'禁用' ">
+                <a-switch :size="rowBtnSize" :checked="record.state === 'ON'" @change="toggleState(record)" />
+              </a-tooltip>
               <a-button
+                v-action:sysRole:update
                 class="rowBtn"
                 type="link"
-                :size="rowBtnSize">删除</a-button>
-            </a-popconfirm>
-          </div>
-        </template>
-      </a-table>
-      <a-modal
-        :visible="modal.visible"
-        :title="modal.title"
-        :confirmLoading="modal.confirmLoading"
-        @cancel="handleModalCancel"
-        @ok="handleModalOk"
-      >
-        <a-form
-          :form="form"
+                :size="rowBtnSize"
+                @click="handleEdit(record)">编辑</a-button>
+              <a-button
+                v-action:sysRole:configResources
+                class="rowBtn"
+                type="link"
+                :size="rowBtnSize"
+                @click="handleConfigResources(record.id)">配置资源</a-button>
+              <a-popconfirm
+                v-action:sysRole:remove
+                placement="top"
+                title="你确定要删除这条数据吗?"
+                trigger="hover"
+                @confirm="handleRemove(record.id)"
+                okText="是"
+                cancelText="否"
+              >
+                <a-button
+                  class="rowBtn"
+                  type="link"
+                  :size="rowBtnSize">删除</a-button>
+              </a-popconfirm>
+            </div>
+          </template>
+        </a-table>
+        <a-modal
+          :visible="modal.visible"
+          :title="modal.title"
+          :confirmLoading="modal.confirmLoading"
+          @cancel="handleModalCancel"
+          @ok="handleModalOk"
         >
-          <a-form-item
-            label="角色名"
-            v-bind="modal.formItemLayout"
+          <a-form
+            :form="form"
           >
-            <a-input
-              v-decorator="['name',{ rules: [{ required: true, message: '请输入角色名!' }]} ]"
-            />
-          </a-form-item>
-          <a-form-item
-            label="编码"
-            v-bind="modal.formItemLayout"
-          >
-            <a-input
-              :disabled="modal.mode === 'edit'"
-              v-decorator="['id',{ rules: [{ required: true, message: '请输入角色编码!' }]} ]"
-            />
-          </a-form-item>
-          <a-form-item
-            label="状态"
-            v-bind="modal.formItemLayout"
-          >
-            <a-radio-group v-decorator="['state',{ rules: [{ required: true, message: '请选择状态!' }]} ]" >
-              <a-radio value="ON">启用</a-radio>
-              <a-radio value="OFF">禁用</a-radio>
-            </a-radio-group>
-          </a-form-item>
-          <a-form-item
-            label="简介"
-            v-bind="modal.formItemLayout"
-          >
-            <a-input
-              type="textarea"
-              v-decorator="['intro']"
-            />
-          </a-form-item>
-        </a-form>
-      </a-modal>
-    </a-card>
+            <a-form-item
+              label="角色名"
+              v-bind="modal.formItemLayout"
+            >
+              <a-input
+                v-decorator="['name',{ rules: [{ required: true, message: '请输入角色名!' }]} ]"
+              />
+            </a-form-item>
+            <a-form-item
+              label="编码"
+              v-bind="modal.formItemLayout"
+            >
+              <a-input
+                :disabled="modal.mode === 'edit'"
+                v-decorator="['id',{ rules: [{ required: true, message: '请输入角色编码!' }]} ]"
+              />
+            </a-form-item>
+            <a-form-item
+              label="状态"
+              v-bind="modal.formItemLayout"
+            >
+              <a-radio-group v-decorator="['state',{ rules: [{ required: true, message: '请选择状态!' }]} ]" >
+                <a-radio value="ON">启用</a-radio>
+                <a-radio value="OFF">禁用</a-radio>
+              </a-radio-group>
+            </a-form-item>
+            <a-form-item
+              label="简介"
+              v-bind="modal.formItemLayout"
+            >
+              <a-input
+                type="textarea"
+                v-decorator="['intro']"
+              />
+            </a-form-item>
+          </a-form>
+        </a-modal>
+      </a-card>
+    </keep-alive>
     <transition name="page-transition">
       <router-view ></router-view>
     </transition>
@@ -126,9 +109,13 @@
 </template>
 <script>
 import { list, add, update, toggleState, remove } from '@/api/sys/role'
-import { noEmptyFieldsObj, modalFormSetting } from '@/utils/util.curd'
+import { modalFormSetting } from '@/utils/util.curd'
+import SearchForm from '@/views/components/SearchForm'
 export default {
   name: 'Role',
+  components: {
+    SearchForm
+  },
   data () {
     return {
       description: '',
@@ -143,26 +130,22 @@ export default {
         { title: '操作', key: 'action', scopedSlots: { customRender: 'action' } }
       ],
       data: [],
-      query: {
-        search_LIKE_name: '',
-        search_LIKE_id: ''
-      },
+      searchFields: [
+        { name: '角色名称', code: 'search_LIKE_name' },
+        { name: '角色编码', code: 'search_LIKE_id' }
+      ],
       pagination: {
         showSizeChanger: true,
         total: 0,
         current: 1,
         pageSize: 10
       },
+      filter: {},
       modal: modalFormSetting()
     }
   },
   created () {
     this.loadData()
-  },
-  computed: {
-    filter () {
-      return noEmptyFieldsObj(this.query)
-    }
   },
   watch: {
     $route (to, from) {
@@ -171,7 +154,7 @@ export default {
       if (to.name === 'RoleConfigResources') {
         this.description = `左侧为 角色 ${to.params.roleId} 未拥有资源，右侧为已拥有资源`
       }
-      if (to.name === 'User') {
+      if (to.name === 'Role') {
         this.description = ''
       }
     }
@@ -194,9 +177,10 @@ export default {
         this.loading = false
       })
     },
-    handleSearch () {
+    handleSearchEvent (filter) {
       this.pagination.current = 1
       this.pagination.total = 0
+      this.filter = filter
       this.loadData()
     },
     handleChange (pagination) {

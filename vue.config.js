@@ -1,23 +1,18 @@
 const path = require('path')
 const webpack = require('webpack')
 const createThemeColorReplacerPlugin = require('./config/plugin.config')
-
 function resolve (dir) {
   return path.join(__dirname, dir)
 }
-
-/**
- * check production or preview(pro.loacg.com only)
- * @returns {boolean}
- */
+// 是否生产环境
 function isProd () {
   return process.env.NODE_ENV === 'production'
 }
-
+// 正式环境使用cdn加速
 const assetsCDN = {
   css: [],
-  // https://unpkg.com/browse/vue@2.6.10/
   js: [
+    // TODO lodash 等
     '//cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js',
     '//cdn.jsdelivr.net/npm/vue-router@3.1.3/dist/vue-router.min.js',
     '//cdn.jsdelivr.net/npm/vuex@3.1.1/dist/vuex.min.js',
@@ -33,24 +28,23 @@ const prodExternals = {
   axios: 'axios'
 }
 
-// vue.config.js
 const vueConfig = {
   // 生产环境相对路径，开发环境 绝对路径 （build 后的 css js 等）
   publicPath: isProd() ? './' : '/',
   configureWebpack: {
-    // webpack plugins
     plugins: [
       // Ignore all locale files of moment.js
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ],
-    // if prod is on, add externals
+    // 正式环境 排除这些打包
     externals: isProd() ? prodExternals : {}
   },
 
   chainWebpack: (config) => {
-    config.resolve.alias
-      .set('@$', resolve('src'))
+    // 起别名
+    config.resolve.alias.set('@$', resolve('src'))
 
+    // 配置两种svg 图标引用方式
     const svgRule = config.module.rule('svg')
     svgRule.uses.clear()
     svgRule
@@ -82,7 +76,6 @@ const vueConfig = {
       less: {
         modifyVars: {
           // less vars，customize ant design theme
-
           // 'primary-color': '#F5222D',
           // 'link-color': '#F5222D',
           // 'border-radius-base': '4px'
@@ -94,9 +87,7 @@ const vueConfig = {
   },
 
   devServer: {
-    // development server port 8000
     port: 8000,
-    // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:8888/v1',
@@ -108,11 +99,8 @@ const vueConfig = {
       }
     }
   },
-
-  // disable source map in production
   productionSourceMap: false,
   lintOnSave: undefined,
-  // babel-loader no-ignore node_modules/*
   transpileDependencies: []
 }
 

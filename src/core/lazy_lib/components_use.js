@@ -28,7 +28,7 @@ import {
   Tabs,
   Icon,
   Badge,
-  // Popover,
+  Popover,
   Dropdown,
   List,
   Avatar,
@@ -71,7 +71,7 @@ Vue.use(Table)
 Vue.use(Tabs)
 Vue.use(Icon)
 Vue.use(Badge)
-// Vue.use(Popover)
+Vue.use(Popover)
 Vue.use(Dropdown)
 Vue.use(List)
 Vue.use(Avatar)

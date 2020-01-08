@@ -18,7 +18,7 @@
           </a-col>
           <a-col :md="4" :sm="24">
               <span class="table-page-search-submitButtons">
-                <a-button type="primary" icon="search" @click="handleSearch"> 查询</a-button>
+                <a-button type="primary"  @click="handleSearch"> 查询</a-button>
               </span>
           </a-col>
         </a-row>
@@ -44,7 +44,7 @@
         <a-badge v-else status="error" />
       </template>
       <template slot="action" slot-scope="record">
-        <div class="editable-row-operations">
+        <div class="row-operations">
           <a-tooltip v-action:sysDict:toggle :title=" record.state==='ON'?'启用':'禁用' " >
             <a-switch :size="rowBtnSize" :checked="record.state === 'ON'" @change="toggleState(record)" />
           </a-tooltip>

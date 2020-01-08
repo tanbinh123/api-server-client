@@ -507,10 +507,20 @@ body {
     }
   }
 }
+
 /**自定义**/
-.rowBtn{
-  margin-left: 10px;
+
+.row-operations {
+  // 排除第一个元素
+  .rowBtn:nth-child(n+2) {
+    margin-left: 10px;
+  }
 }
+.data-table {
+  background-color: white;
+  margin-top: 30px;
+}
+
 .hidden {
   display: none;
 }

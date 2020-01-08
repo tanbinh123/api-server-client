@@ -1,73 +1,57 @@
 <template>
-  <a-popover
-    v-model="visible"
-    trigger="click"
-    placement="bottomRight"
-    overlayClassName="header-notice-wrapper"
-    :getPopupContainer="() => $refs.noticeRef.parentElement"
-    :autoAdjustOverflow="true"
-    :arrowPointAtCenter="true"
-    :overlayStyle="{ width: '300px', top: '50px' }"
-  >
-    <template slot="content">
-      <a-spin :spinning="loading">
-        <a-tabs>
-          <a-tab-pane tab="通知" key="1">
-            <a-list>
-              <a-list-item>
-                <a-list-item-meta title="你收到了 14 份新周报" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png"/>
-                </a-list-item-meta>
-              </a-list-item>
-              <a-list-item>
-                <a-list-item-meta title="你推荐的 曲妮妮 已通过第三轮面试" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png"/>
-                </a-list-item-meta>
-              </a-list-item>
-              <a-list-item>
-                <a-list-item-meta title="这种模板可以区分多种通知类型" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/kISTdvpyTAhtGxpovNWd.png"/>
-                </a-list-item-meta>
-              </a-list-item>
-            </a-list>
-          </a-tab-pane>
-          <a-tab-pane tab="消息" key="2">
-            123
-          </a-tab-pane>
-          <a-tab-pane tab="待办" key="3">
-            123
-          </a-tab-pane>
-        </a-tabs>
-      </a-spin>
-    </template>
-    <span @click="fetchNotice" class="header-notice" ref="noticeRef">
-      <a-badge count="20" :overflowCount="99">
+  <div>
+    <a-tooltip v-if="unreadCount>99" placement="bottomRight">
+      <template slot="title">
+        <span>未读 {{ unreadCount }} 条</span>
+      </template>
+      <span @click="handleClick" class="header-notice" ref="noticeRef">
+        <a-badge :count="unreadCount" :overflowCount="99">
+          <a-icon style="font-size: 16px; padding: 4px" type="bell" />
+        </a-badge>
+      </span>
+    </a-tooltip>
+    <span v-else @click="handleClick" class="header-notice" ref="noticeRef">
+      <a-badge :count="unreadCount" :overflowCount="99">
         <a-icon style="font-size: 16px; padding: 4px" type="bell" />
       </a-badge>
     </span>
-  </a-popover>
+  </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'HeaderNotice',
   data () {
     return {
-      loading: false,
-      visible: false
     }
   },
+  computed: {
+    ...mapGetters(['unreadCount'])
+  },
+  created () {
+    this.getUnreadCount()
+  },
+  mounted () {
+    // console.log('m')
+    // 保证此定时器唯一性 noticeIcon 组件不应该被缓存
+    if (this.timer) {
+      clearInterval(this.timer)
+    } else {
+      this.timer = setInterval(() => {
+        this.getUnreadCount()
+      }, 5 * 60 * 1000) // 5分钟
+    }
+  },
+  destroyed () {
+    // console.log('d')
+    // 保证此定时器唯一性 noticeIcon 组件不应该被缓存
+    clearInterval(this.timer)
+  },
   methods: {
-    fetchNotice () {
-      if (!this.visible) {
-        this.loading = true
-        setTimeout(() => {
-          this.loading = false
-        }, 2000)
-      } else {
-        this.loading = false
-      }
-      this.visible = !this.visible
+    ...mapActions(['getUnreadCount']),
+    handleClick () {
+      alert('跳转到未读消息界面')
     }
   }
 }

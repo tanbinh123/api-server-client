@@ -4,7 +4,7 @@ export default {
   props: {
     keepAlive: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data () {

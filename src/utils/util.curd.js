@@ -4,7 +4,7 @@
  * @param str
  */
 export function isEmpty (str) {
-  if (str === '' || str.trim() === '' || str === undefined || str === null) {
+  if (str === undefined || str === null || str.trim() === '') {
     return true
   }
   return false
@@ -20,7 +20,7 @@ export function notEmpty (str) {
 }
 
 /**
- * 返回字段全部不为空的 新对象
+ * 返回 对象不为空的 字段组成的对象
  * @param obj
  */
 export function noEmptyFieldsObj (obj) {

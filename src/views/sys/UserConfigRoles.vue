@@ -57,7 +57,7 @@
     <a-col :xs="24" :sm="24" :md="17">
       <a-card :loading="user.loading" :bordered="false">
         <a-card-meta>
-          <a slot="title">{{ user.username }} <tempalte v-if="user.nickname">- {{ user.nickname }}</tempalte></a>
+          <a slot="title">{{ user.username }} <template v-if="user.nickname"> - {{ user.nickname }}</template></a>
           <a-avatar class="card-avatar" slot="avatar" :src="`${fileServer}/${user.avatar}`" :size="64"/>
           <div class="meta-content" slot="description">
             <a-row>

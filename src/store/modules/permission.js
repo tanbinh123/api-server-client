@@ -1,5 +1,5 @@
-import { asyncRouterMap, constantRouterMap } from '@/config/router.config'
-import _ from 'lodash'
+import { asyncRouterMap, constantRouterMap } from '@/router/router'
+import _cloneDeep from 'lodash/cloneDeep'
 
 /**
  * 过滤账户是否拥有某一个权限，并将菜单从加载列表移除
@@ -57,7 +57,7 @@ const permission = {
         const permissionList = [...roles, ...resources]
 
         // 数组对象深拷贝
-        const asyncRouterMapCopy = _.cloneDeep(asyncRouterMap)
+        const asyncRouterMapCopy = _cloneDeep(asyncRouterMap)
         const accessedRouters = filterAsyncRouter(asyncRouterMapCopy, permissionList)
         commit('SET_ROUTERS', accessedRouters)
         resolve()

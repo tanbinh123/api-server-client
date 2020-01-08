@@ -11,29 +11,7 @@
               v-decorator="['nickname',{ rules: [{ required: true, message: '请输入姓名!' }]}]"
               placeholder="给自己起个名字" />
           </a-form-item>
-          <a-form-item
-            v-bind="formLayout"
-            label="头像"
-          >
-            <a-upload
-              name="file"
-              listType="picture-card"
-              class="avatar-uploader"
-              :headers="uploadHeaders"
-              :showUploadList="false"
-              :action="`${fileServer}/file/upload`"
-              :beforeUpload="handleBeforeUpload"
-              @change="handleUploadChange"
-            >
-              <a-tooltip placement="right" title="点击上传">
-                <img v-if="avatar!==''" :src="`${this.fileServer}/${this.avatar}`" width="100px" alt="头像" />
-                <div v-else>
-                  <a-icon :type="avatarLoading ? 'loading' : 'plus'" />
-                  <div class="ant-upload-text">上传</div>
-                </div>
-              </a-tooltip>
-            </a-upload>
-          </a-form-item>
+          <avatar-upload :imgPath.sync="avatar" itemLabel="头像" :formItemLayout="formLayout"/>
           <a-form-item
             v-bind="formLayout"
             label="简介"
@@ -77,12 +55,14 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { updateUserInfo } from '@/api/account'
+import AvatarUpload from '@/views/components/AvatarUpload'
 import store from '@/store'
 export default {
   name: 'Info',
+  components: {
+    AvatarUpload
+  },
   data () {
     return {
       form: this.$form.createForm(this),
@@ -92,10 +72,7 @@ export default {
       },
       avatarLoading: false,
       btnLoading: false,
-      avatar: '',
-      uploadHeaders: {
-        authorization: Vue.ls.get(ACCESS_TOKEN)
-      }
+      avatar: ''
     }
   },
   created () {
@@ -114,42 +91,16 @@ export default {
         })
       })
     },
-    handleUploadChange (info) {
-      if (info.file.status === 'uploading') {
-        this.avatarLoading = true
-        this.avatar = ''
-        return
-      }
-      if (info.file.status === 'done') {
-        setTimeout(() => {
-          this.avatarLoading = false
-          if (info.file.response.status) {
-            this.avatar = info.file.response.data
-          }
-        }, 100)
-      }
-    },
-    handleBeforeUpload (file) {
-      const isJPG = file.type === 'image/jpeg'
-      const isPNG = file.type === 'image/png'
-      if (!isJPG && !isPNG) {
-        this.$message.error('仅能上传  JPG/PNG 文件!')
-      }
-      const isLt2M = file.size / 1024 / 1024 < 2
-      if (!isLt2M) {
-        this.$message.error('上传文件必须小于 2MB!')
-      }
-      return (isJPG || isPNG) && isLt2M
-    },
     handleBtnClick () {
       this.form.validateFields((err, values) => {
         if (!err) {
+          delete values.imgFile
           values.avatar = this.avatar
           this.btnLoading = true
           updateUserInfo(values).then(result => {
             if (result.status) {
               store.dispatch('GetInfo').then(ret => {
-                // ret.status && this.initUserInfo()
+                // this.initUserInfo()
               }).catch(() => {})
             }
           }).finally(() => {
@@ -161,6 +112,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less" scoped>
-</style>
