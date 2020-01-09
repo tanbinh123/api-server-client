@@ -11,17 +11,7 @@
               v-decorator="['oldPwd',{ rules: [{ required: true, message: '请输入姓名!' }]}]"
               placeholder="输入原密码" />
           </a-form-item>
-          <a-form-item
-            v-bind="formLayout"
-            label="新密码"
-          >
-            <a-input-password
-              name="newPwd"
-              v-decorator="['newPwd',{ rules: [{ required: true, message: '输入新密码!' },
-                                               {pattern: /^[\w]{6,10}$/, message: '密码格式 必须位 6-15位数字或字母'},
-                                               {validator: handleNewPwd}], validateFirst: true}]"
-              placeholder="输入新密码" />
-          </a-form-item>
+          <password inputId="newPwd" :formLayout="formLayout"/>
           <a-form-item
             v-bind="formLayout"
             label="确认密码"
@@ -29,8 +19,7 @@
             <a-input-password
               name="confirmNewPwd"
               v-decorator="['confirmNewPwd',{ rules: [{ required: true, message: '输入确认密码!' },
-                                                      {pattern: /^[\w]{6,10}$/, message: '密码格式 必须位 6-15位数字或字母'},
-                                                      {validator: handleConfirmNewPwd}], validateFirst: true}]"
+                                                      {validator: handleConfirmNewPwd}], validateTrigger: ['change', 'blur'], validateFirst: true}]"
               placeholder="输入确认密码" />
           </a-form-item>
           <a-form-item>
@@ -48,8 +37,12 @@
 
 <script>
 import { changePwd } from '@/api/account'
+import Password from '@/views/components/Password'
 export default {
   name: 'Pwd',
+  components: {
+    Password
+  },
   data () {
     return {
       form: this.$form.createForm(this),
@@ -61,14 +54,6 @@ export default {
     }
   },
   methods: {
-    handleNewPwd (rule, value, callback) {
-      const confirmNewPwd = this.form.getFieldValue('confirmNewPwd')
-      if (confirmNewPwd && confirmNewPwd !== value) {
-        callback(new Error('新密码和确认密码不一致'))
-      } else {
-        callback()
-      }
-    },
     handleConfirmNewPwd (rule, value, callback) {
       const newPwd = this.form.getFieldValue('newPwd')
       if (newPwd && newPwd !== value) {

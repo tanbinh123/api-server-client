@@ -71,6 +71,18 @@ export const constantRouterMap = [
             name: 'UserLog',
             component: () => import(/* webpackChunkName: "userLog" */ '@/views/profile/Log'),
             meta: { title: '操作日志' }
+          },
+          {
+            path: '/profile/msg-unread',
+            name: 'MsgUnread',
+            component: () => import(/* webpackChunkName: "msgUnread" */ '@/views/profile/MsgUnread'),
+            meta: { title: '未读消息' }
+          },
+          {
+            path: '/profile/msg-read',
+            name: 'MsgRead',
+            component: () => import(/* webpackChunkName: "MsgRead" */ '@/views/profile/MsgRead'),
+            meta: { title: '已读消息' }
           }
         ]
       }

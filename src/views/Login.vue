@@ -55,6 +55,7 @@
 import Vue from 'vue'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
 
 export default {
   name: 'Login',
@@ -78,7 +79,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['Login', 'Logout']),
+    ...mapActions(['Login', 'Logout', 'getUnreadCount']),
     handleSubmit (e) {
       e.preventDefault()
       const { form: { validateFields }, state, Login } = this
@@ -101,6 +102,9 @@ export default {
                 Vue.ls.set('loginParams', loginParams, 7 * 24 * 60 * 60 * 1000)
               } else {
                 Vue.ls.remove('loginParams')
+              }
+              if (Vue.ls.get(ACCESS_TOKEN)) {
+                this.getUnreadCount()
               }
               this.loginErrMsg = ''
               this.$router.push({ path: '/' })

@@ -57,7 +57,6 @@
 <script>
 import { updateUserInfo } from '@/api/account'
 import AvatarUpload from '@/views/components/AvatarUpload'
-import store from '@/store'
 export default {
   name: 'Info',
   components: {
@@ -99,7 +98,7 @@ export default {
           this.btnLoading = true
           updateUserInfo(values).then(result => {
             if (result.status) {
-              store.dispatch('GetInfo').then(ret => {
+              this.$store.dispatch('GetInfo').then(ret => {
                 // this.initUserInfo()
               }).catch(() => {})
             }

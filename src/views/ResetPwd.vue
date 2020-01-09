@@ -55,33 +55,19 @@
             v-text="!smsSendBtnState && '获取验证码'||(time+' s')"></a-button>
         </a-col>
       </a-row>
-
+      <password inputId="password" :showLabel="false" inputPrefixIcon="lock" inputSize="large"/>
       <a-form-item>
-        <a-input
-          size="large"
-          type="password"
-          autocomplete="false"
-          placeholder="新密码"
-          v-decorator="['password',{validateFirst: true, rules: [{ required: true, message: '请输入密码' },
-                                                                 {pattern: /^[\w]{6,10}$/, message: '密码格式 必须位 6-15位数字或字母'},
-                                                                 {validator: handlePassword}
-          ], validateTrigger: 'blur'} ]"
-        >
-          <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-        </a-input>
-      </a-form-item>
-      <a-form-item>
-        <a-input
+        <a-input-password
           size="large"
           type="password"
           autocomplete="false"
           placeholder="确认密码"
           v-decorator="['confirmPassword',{validateFirst: true, rules: [{ required: true, message: '请输入确认密码' },
-                                                                        {pattern: /^[\w]{6,10}$/, message: '密码格式 必须位 6-15位数字或字母'},
-                                                                        {validator: handleConfirmPassword}], validateTrigger: 'blur'} ]"
+                                                                        {validator: handleConfirmPassword}],
+                                                                         validateTrigger: ['change', 'blur']} ]"
         >
           <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-        </a-input>
+        </a-input-password>
       </a-form-item>
 
       <a-form-item style="margin-top:24px">
@@ -101,8 +87,12 @@
 
 <script>
 import { sendEmailCode, sendPhoneCode, resetPwd } from '@/api/account'
+import Password from '@/views/components/Password'
 export default {
   name: 'ResetPwd',
+  components: {
+    Password
+  },
   data () {
     return {
       form: this.$form.createForm(this),
@@ -116,14 +106,6 @@ export default {
   created () {
   },
   methods: {
-    handlePassword (rule, value, callback) {
-      const confirmPassword = this.form.getFieldValue('confirmPassword')
-      if (confirmPassword && confirmPassword !== value) {
-        callback(new Error('密码和确认密码不一致'))
-      } else {
-        callback()
-      }
-    },
     handleConfirmPassword (rule, value, callback) {
       const password = this.form.getFieldValue('password')
       if (password && password !== value) {

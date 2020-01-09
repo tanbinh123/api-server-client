@@ -9,7 +9,11 @@ const api = {
   sendEmailCode: '/account/send-email-code',
   sendPhoneCode: '/account/send-phone-code',
   resetPwd: '/account/reset-password',
-  unreadCount: '/sys/msg/unread-count'
+  unreadCount: '/sys/msg/unread-count',
+  msgUnread: '/sys/msg/list/0',
+  readMsg: '/sys/msg/read',
+  msgRead: '/sys/msg/list/1',
+  delMsg: '/sys/msg/delete'
 }
 export function login (data) {
   return axios({
@@ -47,7 +51,7 @@ export function changePwd (data) {
   })
 }
 
-// 列表数据
+// 日志列表数据
 export function listLog (data) {
   return axios({
     url: api.listLog,
@@ -80,10 +84,42 @@ export function resetPwd (data) {
   })
 }
 
-// 删除
+// 未读消息数量
 export function unReadCount () {
   return axios({
     url: api.unreadCount,
+    method: 'get'
+  })
+}
+
+// 未读消息列表
+export function listUnreadMsg (data) {
+  return axios({
+    url: api.msgUnread,
+    method: 'post',
+    data: data
+  })
+}
+
+export function readMsg (id) {
+  return axios({
+    url: `${api.readMsg}/${id}`,
+    method: 'get'
+  })
+}
+
+// 已读消息列表
+export function listReadMsg (data) {
+  return axios({
+    url: api.msgRead,
+    method: 'post',
+    data: data
+  })
+}
+
+export function delMsg (id) {
+  return axios({
+    url: `${api.delMsg}/${id}`,
     method: 'get'
   })
 }

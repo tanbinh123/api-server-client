@@ -184,16 +184,21 @@ export default {
       return noEmptyFieldsObj(this.haveRoles.query)
     }
   },
-  created () {
+  mounted () {
     this.loadUserInfo()
     this.loadNoRolesData()
     this.loadHaveRolesData()
   },
-  beforeRouteLeave (to, from, next) {
-    next()
-    // 为了每次进入能更新数据，离开时销毁本组件
-    this.$destroy()
-  },
+  // created () {
+  //   this.loadUserInfo()
+  //   this.loadNoRolesData()
+  //   this.loadHaveRolesData()
+  // },
+  // beforeRouteLeave (to, from, next) {
+  //   next()
+  //   // 为了每次进入能更新数据，离开时销毁本组件
+  //   this.$destroy()
+  // },
   methods: {
     loadUserInfo () {
       const userId = this.$route.params.userId

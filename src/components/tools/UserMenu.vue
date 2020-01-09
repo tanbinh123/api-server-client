@@ -16,7 +16,7 @@
           <a-menu-item key="0">
             <router-link :to="{ name: 'Profile' }">
               <a-icon type="setting"/>
-              <span>账户设置</span>
+              <span>个人中心</span>
             </router-link>
           </a-menu-item>
           <a-menu-divider/>

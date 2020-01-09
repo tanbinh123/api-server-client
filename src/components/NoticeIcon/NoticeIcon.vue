@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-tooltip v-if="unreadCount>99" placement="bottomRight">
+    <a-tooltip v-if="unreadCount>99" >
       <template slot="title">
         <span>未读 {{ unreadCount }} 条</span>
       </template>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   name: 'HeaderNotice',
   data () {
@@ -29,29 +29,9 @@ export default {
   computed: {
     ...mapGetters(['unreadCount'])
   },
-  created () {
-    this.getUnreadCount()
-  },
-  mounted () {
-    // console.log('m')
-    // 保证此定时器唯一性 noticeIcon 组件不应该被缓存
-    if (this.timer) {
-      clearInterval(this.timer)
-    } else {
-      this.timer = setInterval(() => {
-        this.getUnreadCount()
-      }, 5 * 60 * 1000) // 5分钟
-    }
-  },
-  destroyed () {
-    // console.log('d')
-    // 保证此定时器唯一性 noticeIcon 组件不应该被缓存
-    clearInterval(this.timer)
-  },
   methods: {
-    ...mapActions(['getUnreadCount']),
     handleClick () {
-      alert('跳转到未读消息界面')
+      this.$router.push({ name: 'MsgUnread' })
     }
   }
 }

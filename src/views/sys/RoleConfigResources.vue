@@ -170,16 +170,21 @@ export default {
       return `${this.role.id} | ${this.role.name} | ${this.role.state === 'ON' ? '启用' : '禁用'}  | ${this.role.intro}`
     }
   },
-  created () {
+  mounted () {
     this.loadRoleInfo()
     this.loadNoRolesData()
     this.loadHaveRolesData()
   },
-  beforeRouteLeave (to, from, next) {
-    next()
-    // 为了每次进入能更新数据，离开时销毁本组件
-    this.$destroy()
-  },
+  // created () {
+  //   this.loadRoleInfo()
+  //   this.loadNoRolesData()
+  //   this.loadHaveRolesData()
+  // },
+  // beforeRouteLeave (to, from, next) {
+  //   next()
+  //   // 为了每次进入能更新数据，离开时销毁本组件
+  //   this.$destroy()
+  // },
   methods: {
     loadRoleInfo () {
       const roleId = this.$route.params.roleId

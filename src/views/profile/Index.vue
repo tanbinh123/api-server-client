@@ -25,6 +25,16 @@
                 操作日志
               </router-link>
             </a-menu-item>
+            <a-menu-item key="/profile/msg-unread">
+              <router-link :to="{ name: 'MsgUnread' }">
+                <span>未读消息</span>  <a-badge style="float: right; margin-top: 10px;" :count="unreadCount" :overflowCount="999" />
+              </router-link>
+            </a-menu-item>
+            <a-menu-item key="/profile/msg-read">
+              <router-link :to="{ name: 'MsgRead' }">
+                已读消息
+              </router-link>
+            </a-menu-item>
           </a-menu>
         </div>
         <div class="account-settings-info-right">
@@ -41,7 +51,7 @@
 <script>
 import { RouteView } from '@/layouts'
 import { mixinDevice } from '@/utils/mixin.js'
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'RouterViewBase',
   components: {
@@ -76,6 +86,9 @@ export default {
 
       pageTitle: ''
     }
+  },
+  computed: {
+    ...mapGetters(['unreadCount'])
   },
   created () {
     this.updateMenu()
