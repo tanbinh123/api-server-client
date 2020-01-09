@@ -3,6 +3,11 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="20">
+          <a-col :md="10" :sm="24">
+            <span class="table-page-search-submitButtons">
+              <a-button v-action:sysDict:add type="primary" icon="plus" @click="handleAdd">新增</a-button>
+            </span>
+          </a-col>
           <a-col :md="4" :sm="24">
             <a-form-item label="方式">
               <a-select v-model="query.type" @change="handleTypeChange" >
@@ -11,21 +16,18 @@
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="10" :sm="24">
+          <a-col :md="8" :sm="24">
             <a-form-item :label="query.type==='LIKE'?'名称/编码':'编码'">
-              <a-input v-model="query.key" :placeholder="query.type==='LIKE'?'模糊查找不带层级结构':'精确查找带层级结构'"/>
+              <a-input v-model="query.key" @pressEnter="handleSearch" :placeholder="query.type==='LIKE'?'模糊查找不带层级结构':'精确查找带层级结构'"/>
             </a-form-item>
           </a-col>
-          <a-col :md="4" :sm="24">
-              <span class="table-page-search-submitButtons">
-                <a-button type="primary"  @click="handleSearch"> 查询</a-button>
-              </span>
+          <a-col :md="2" :sm="24">
+            <span class="table-page-search-submitButtons">
+              <a-button type="primary" @click="handleSearch"> 查询</a-button>
+            </span>
           </a-col>
         </a-row>
       </a-form>
-    </div>
-    <div class="table-operator">
-      <a-button v-action:sysDict:add type="primary" icon="plus" @click="handleAdd">新增</a-button>
     </div>
     <a-table
       :bordered="false"

@@ -1,9 +1,10 @@
 <template>
   <a-card :bordered="false">
-    <search-form :searchFields="searchFields" @search="handleSearchEvent"/>
-    <div class="table-operator">
-      <a-button v-action:sysResource:add type="primary"  icon="plus"  @click="handleAdd">新增</a-button>
-    </div>
+    <single-search-form :searchFields="searchFields" @search="handleSearchEvent">
+      <template #head>
+        <a-button  v-action:sysResource:add type="primary"  icon="plus"  @click="handleAdd">新增</a-button>
+      </template>
+    </single-search-form>
     <a-table
       :bordered="false"
       :columns="columns"
@@ -124,11 +125,11 @@
 <script>
 import { list, add, update, toggleState, remove } from '@/api/sys/resource'
 import { modalFormSetting } from '@/utils/util.curd'
-import SearchForm from '@/views/components/SearchForm'
+import SingleSearchForm from '@/views/components/SingleSearchForm'
 export default {
   name: 'Resource',
   components: {
-    SearchForm
+    SingleSearchForm
   },
   data () {
     return {
@@ -147,7 +148,7 @@ export default {
       data: [],
       searchFields: [
         { name: '资源名称', code: 'search_LIKE_name' },
-        { name: '资源编码', code: 'search_LIKE_id' }
+        { name: '权限标识', code: 'search_LIKE_id' }
       ],
       pagination: {
         // 表格分页

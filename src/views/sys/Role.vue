@@ -3,10 +3,11 @@
     <!-- 因为页面内有路由跳转到子页面，所以加keep-alive-->
     <keep-alive>
       <a-card v-if="$route.name === 'Role'" :bordered="false">
-        <search-form :searchFields="searchFields" @search="handleSearchEvent"/>
-        <div class="table-operator">
-          <a-button v-action:sysRole:add type="primary" icon="plus" @click="handleAdd">新增</a-button>
-        </div>
+        <single-search-form :searchFields="searchFields" @search="handleSearchEvent">
+          <template #head>
+            <a-button v-action:sysRole:add type="primary" icon="plus" @click="handleAdd">新增</a-button>
+          </template>
+        </single-search-form>
         <a-table
           :bordered="false"
           :columns="columns"
@@ -110,11 +111,11 @@
 <script>
 import { list, add, update, toggleState, remove } from '@/api/sys/role'
 import { modalFormSetting } from '@/utils/util.curd'
-import SearchForm from '@/views/components/SearchForm'
+import SingleSearchForm from '@/views/components/SingleSearchForm'
 export default {
   name: 'Role',
   components: {
-    SearchForm
+    SingleSearchForm
   },
   data () {
     return {

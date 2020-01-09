@@ -1,16 +1,17 @@
 <template>
   <a-card :bordered="false">
-    <search-form :searchFields="searchFields" @search="handleSearchEvent"/>
-    <div class="table-operator">
-      <a-button
-        v-action:sysLog:remove
-        type="danger"
-        icon="delete"
-        :loading="removeBtnLoading"
-        :disabled="selectedRowKeys.length === 0"
-        @click="handleRemove">删除</a-button>
-      <template v-if="selectedRowKeys.length > 0">已选中 {{ selectedRowKeys.length }} 条数据</template>
-    </div>
+    <single-search-form :searchFields="searchFields" @search="handleSearchEvent">
+      <template #head>
+        <a-button
+          v-action:sysLog:remove
+          type="danger"
+          icon="delete"
+          :loading="removeBtnLoading"
+          :disabled="selectedRowKeys.length === 0"
+          @click="handleRemove">删除</a-button>
+        <template v-if="selectedRowKeys.length > 0"><span style="margin-left: 5px"> 已选中 {{ selectedRowKeys.length }} 条数据</span></template>
+      </template>
+    </single-search-form>
     <a-table
       :bordered="false"
       :columns="columns"
@@ -49,11 +50,11 @@
 </template>
 <script>
 import { list, remove } from '@/api/sys/log'
-import SearchForm from '@/views/components/SearchForm'
+import SingleSearchForm from '@/views/components/SingleSearchForm'
 export default {
   name: 'Log',
   components: {
-    SearchForm
+    SingleSearchForm
   },
   data () {
     return {

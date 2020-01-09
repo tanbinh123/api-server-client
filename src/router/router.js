@@ -81,7 +81,7 @@ export const constantRouterMap = [
           {
             path: '/profile/msg-read',
             name: 'MsgRead',
-            component: () => import(/* webpackChunkName: "MsgRead" */ '@/views/profile/MsgRead'),
+            component: () => import(/* webpackChunkName: "msgRead" */ '@/views/profile/MsgRead'),
             meta: { title: '已读消息' }
           }
         ]
