@@ -68,7 +68,7 @@ export default {
         { title: '用户', dataIndex: 'username' },
         { title: '时间', dataIndex: 'createTime' },
         { title: 'IP', dataIndex: 'ip' },
-        { title: '操作', key: 'ope', scopedSlots: { customRender: 'ope' } }
+        { title: '操作', key: 'ope', align: 'right', scopedSlots: { customRender: 'ope' } }
       ],
       data: [],
       searchFields: [

@@ -128,7 +128,7 @@ export default {
         { title: '角色名', dataIndex: 'name' },
         { title: '角色编码', dataIndex: 'id' },
         { title: '介绍', dataIndex: 'intro' },
-        { title: '操作', key: 'action', scopedSlots: { customRender: 'action' } }
+        { title: '操作', key: 'action', align: 'right', scopedSlots: { customRender: 'action' } }
       ],
       data: [],
       searchFields: [

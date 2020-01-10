@@ -513,8 +513,12 @@ body {
 /**自定义**/
 
 .row-operations {
-  // 排除第一个元素
-  .rowBtn:nth-child(n+2) {
+  // 排除第一个元素 align left
+  //.rowBtn:nth-child(n+2) {
+  //  margin-left: 10px;
+  //}
+  // align right
+  .rowBtn:not(:last-child){
     margin-left: 10px;
   }
 }

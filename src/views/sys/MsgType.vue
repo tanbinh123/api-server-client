@@ -207,7 +207,7 @@ export default {
         { title: '过期天数', dataIndex: 'expiry' },
         { title: '作废天数', dataIndex: 'dead' },
         { title: '状态', dataIndex: 'state', align: 'center', scopedSlots: { customRender: 'state' } },
-        { title: '操作', key: 'action', scopedSlots: { customRender: 'action' } }
+        { title: '操作', key: 'action', align: 'right', scopedSlots: { customRender: 'action' } }
       ],
       data: [],
       pushMode: pushMode,

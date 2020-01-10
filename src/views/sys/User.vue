@@ -164,7 +164,7 @@ export default {
         { title: '简介', dataIndex: 'intro' },
         { title: '电话', dataIndex: 'phone', align: 'left' },
         { title: '邮箱', dataIndex: 'email', align: 'left' },
-        { title: '操作', key: 'action', scopedSlots: { customRender: 'action' } }
+        { title: '操作', key: 'action', align: 'right', scopedSlots: { customRender: 'action' } }
       ],
       data: [],
       searchFields: [

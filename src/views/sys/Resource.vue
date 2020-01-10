@@ -143,7 +143,7 @@ export default {
         { title: '类型', dataIndex: 'type', scopedSlots: { customRender: 'type' } },
         { title: '排序号', dataIndex: 'sort' },
         { title: '状态', dataIndex: 'state', align: 'center', scopedSlots: { customRender: 'state' } },
-        { title: '操作', key: 'action', scopedSlots: { customRender: 'action' } }
+        { title: '操作', key: 'action', align: 'right', scopedSlots: { customRender: 'action' } }
       ],
       data: [],
       searchFields: [

@@ -3,9 +3,9 @@
     <search-form :searchFields="searchFields" :pmd="8" @search="handleSearchEvent"/>
     <a-list itemLayout="horizontal" size="large" :loading="loading" :pagination="pagination" :dataSource="data">
       <a-list-item slot="renderItem" slot-scope="item" key="item.title">
-        <a-button slot="actions" type="link" @click="handleRead(item.id)">已读</a-button>
+        <a slot="actions" @click="handleRead(item.id)">已阅</a>
         <a-list-item-meta :description="item.content">
-          <a slot="title" :href="item.href">{{ item.title }}</a>
+          <a slot="title" class="title">{{ item.title }} <small class="small-title-time">{{ item.createTime | calendar }} </small></a>
           <a-avatar slot="avatar" :src="`${fileServer}/${item.logo}`" />
         </a-list-item-meta>
       </a-list-item>
@@ -79,3 +79,12 @@ export default {
   }
 }
 </script>
+<style>
+  .title {
+    display: block
+  }
+  .title small {
+    float: right;
+    color: rgba(0, 0, 0, 0.45)
+  }
+</style>
