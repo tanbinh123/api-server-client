@@ -17,6 +17,7 @@
       :columns="columns"
       :loading="loading"
       :dataSource="data"
+      :size="tableSize"
       :pagination="pagination"
       :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: (selectedRowKeys) => {this.selectedRowKeys = selectedRowKeys}}"
       @change="handleChange"
@@ -28,7 +29,7 @@
         <a-button
           class="rowBtn"
           type="link"
-          :size="rowBtnSize"
+          size="small"
           @click="handleDetail(record)">详情</a-button>
       </template>
     </a-table>
@@ -59,7 +60,6 @@ export default {
   data () {
     return {
       // description: '',
-      rowBtnSize: 'small',
       loading: false,
       removeBtnLoading: false,
       columns: [

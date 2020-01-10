@@ -8,13 +8,13 @@
       :bordered="false"
       :columns="columns"
       :loading="loading"
-      :defaultExpandAllRows="true"
+      :size="tableSize"
       :dataSource="data"
       :pagination="pagination"
       @change="handleChange"
       :rowKey="record => record.id">
       <template slot="logo" slot-scope="logo">
-        <a-avatar :src="`${fileServer}/${logo}`"/>
+        <a-avatar size="small" :src="`${fileServer}/${logo}`"/>
       </template>
       <template slot="state" slot-scope="state">
         <a-badge v-if="state === 'ON'" status="success"/>
@@ -23,9 +23,9 @@
       <template slot="action" slot-scope="record">
         <div class="row-operations">
           <a-tooltip v-action:sysMsgType:toggle :title=" record.state==='ON'?'启用':'禁用' ">
-            <a-switch :size="rowBtnSize" :checked="record.state === 'ON'" @change="toggleState(record)"/>
+            <a-switch size="small" :checked="record.state === 'ON'" @change="toggleState(record)"/>
           </a-tooltip>
-          <a-button class="rowBtn" :size="rowBtnSize" type="link" v-action:sysMsgType:update @click="handleEdit(record)">
+          <a-button class="rowBtn" size="small" type="link" v-action:sysMsgType:update @click="handleEdit(record)">
             编辑
           </a-button>
           <a-popconfirm
@@ -40,7 +40,7 @@
             <a-button
               class="rowBtn"
               type="link"
-              :size="rowBtnSize">删除
+              size="small">删除
             </a-button>
           </a-popconfirm>
         </div>
@@ -197,16 +197,15 @@ export default {
     return {
       description: '',
       form: this.$form.createForm(this),
-      rowBtnSize: 'small',
       loading: false,
       columns: [
+        { title: '状态', dataIndex: 'state', align: 'center', scopedSlots: { customRender: 'state' } },
         { title: '图标', dataIndex: 'logo', align: 'center', scopedSlots: { customRender: 'logo' } },
         { title: '编码', dataIndex: 'id' },
         { title: '标题', dataIndex: 'name' },
         { title: '推送方式', dataIndex: 'pushMode' },
         { title: '过期天数', dataIndex: 'expiry' },
         { title: '作废天数', dataIndex: 'dead' },
-        { title: '状态', dataIndex: 'state', align: 'center', scopedSlots: { customRender: 'state' } },
         { title: '操作', key: 'action', align: 'right', scopedSlots: { customRender: 'action' } }
       ],
       data: [],

@@ -9,7 +9,7 @@
       :bordered="false"
       :columns="columns"
       :loading="loading"
-      :defaultExpandAllRows="true"
+      :size="tableSize"
       :dataSource="data"
       :pagination="pagination"
       @change="handleChange"
@@ -25,20 +25,20 @@
       <template slot="action" slot-scope="record">
         <div class="row-operations">
           <a-tooltip v-action:sysResource:toggle :title="record.state==='ON'?'启用':'禁用' " >
-            <a-switch :size="rowBtnSize" :checked="record.state === 'ON'" @change="toggleState(record)" />
+            <a-switch size="small" :checked="record.state === 'ON'" @change="toggleState(record)" />
           </a-tooltip>
           <a-button
             v-if="record.type === 'menu'"
             v-action:sysResource:add
             class="rowBtn"
             type="link"
-            :size="rowBtnSize"
+            size="small"
             @click="handleAddChildren(record)">添加下级</a-button>
           <a-button
             v-action:sysResource:update
             class="rowBtn"
             type="link"
-            :size="rowBtnSize"
+            size="small"
             @click="handleEdit(record)">编辑</a-button>
           <a-popconfirm
             v-action:sysResource:remove
@@ -52,7 +52,7 @@
             <a-button
               class="rowBtn"
               type="link"
-              :size="rowBtnSize">删除</a-button>
+              size="small">删除</a-button>
           </a-popconfirm>
         </div>
       </template>
@@ -135,7 +135,6 @@ export default {
     return {
       // description: '配置系统资源权限，系统资源分为 菜单 和 按钮, 菜单可以包含按钮。',
       form: this.$form.createForm(this),
-      rowBtnSize: 'small',
       loading: false,
       columns: [
         { title: '资源名称', dataIndex: 'name' },

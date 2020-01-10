@@ -34,6 +34,7 @@
       :columns="columns"
       :loading="loading"
       :dataSource="data"
+      :size="tableSize"
       :pagination="pagination"
       @change="handleChange"
       :rowKey="record => record.id" >
@@ -48,19 +49,19 @@
       <template slot="action" slot-scope="record">
         <div class="row-operations">
           <a-tooltip v-action:sysDict:toggle :title=" record.state==='ON'?'启用':'禁用' " >
-            <a-switch :size="rowBtnSize" :checked="record.state === 'ON'" @change="toggleState(record)" />
+            <a-switch  size="small" :checked="record.state === 'ON'" @change="toggleState(record)" />
           </a-tooltip>
           <a-button
             v-action:sysDict:add
             class="rowBtn"
             type="link"
-            :size="rowBtnSize"
+            size="small"
             @click="handleAddChildren(record)">添加下级</a-button>
           <a-button
             v-action:sysDict:update
             class="rowBtn"
             type="link"
-            :size="rowBtnSize"
+            size="small"
             @click="handleEdit(record)">编辑</a-button>
           <a-popconfirm
             v-action:sysDict:remove
@@ -74,7 +75,7 @@
             <a-button
               class="rowBtn"
               type="link"
-              :size="rowBtnSize">删除</a-button>
+              size="small">删除</a-button>
           </a-popconfirm>
         </div>
       </template>
@@ -157,7 +158,6 @@ export default {
   data () {
     return {
       form: this.$form.createForm(this),
-      rowBtnSize: 'small',
       loading: false,
       columns: [
         { title: '名称', dataIndex: 'name' },

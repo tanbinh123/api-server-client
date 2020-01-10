@@ -20,6 +20,7 @@ Vue.use(VueAxios)
 
 // 文件服务器地址
 Vue.prototype.fileServer = 'http://127.0.0.1:8888/v1'
+Vue.prototype.tableSize = 'middle'
 
 new Vue({
   router,

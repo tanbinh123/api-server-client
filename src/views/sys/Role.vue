@@ -12,6 +12,7 @@
           :bordered="false"
           :columns="columns"
           :loading="loading"
+          :size="tableSize"
           :dataSource="data"
           :pagination="pagination"
           @change="handleChange"
@@ -23,19 +24,19 @@
           <template slot="action" slot-scope="record">
             <div class="row-operations">
               <a-tooltip v-action:sysRole:toggle :title=" record.state==='ON'?'启用':'禁用' ">
-                <a-switch :size="rowBtnSize" :checked="record.state === 'ON'" @change="toggleState(record)" />
+                <a-switch size="small" :checked="record.state === 'ON'" @change="toggleState(record)" />
               </a-tooltip>
               <a-button
                 v-action:sysRole:update
                 class="rowBtn"
                 type="link"
-                :size="rowBtnSize"
+                size="small"
                 @click="handleEdit(record)">编辑</a-button>
               <a-button
                 v-action:sysRole:configResources
                 class="rowBtn"
                 type="link"
-                :size="rowBtnSize"
+                size="small"
                 @click="handleConfigResources(record.id)">配置资源</a-button>
               <a-popconfirm
                 v-action:sysRole:remove
@@ -49,7 +50,7 @@
                 <a-button
                   class="rowBtn"
                   type="link"
-                  :size="rowBtnSize">删除</a-button>
+                  size="small">删除</a-button>
               </a-popconfirm>
             </div>
           </template>
@@ -121,7 +122,6 @@ export default {
     return {
       description: '',
       form: this.$form.createForm(this),
-      rowBtnSize: 'small',
       loading: false,
       columns: [
         { title: '状态', dataIndex: 'state', align: 'center', scopedSlots: { customRender: 'state' } },

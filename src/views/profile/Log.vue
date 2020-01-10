@@ -5,6 +5,7 @@
       :bordered="false"
       :columns="columns"
       :loading="loading"
+      :size="tableSize"
       :dataSource="data"
       :pagination="pagination"
       @change="handleChange"

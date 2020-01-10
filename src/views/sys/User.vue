@@ -11,13 +11,13 @@
           :bordered="false"
           :columns="columns"
           :loading="loading"
-          :defaultExpandAllRows="true"
+          :size="tableSize"
           :dataSource="data"
           :pagination="pagination"
           @change="handleChange"
           :rowKey="record => record.id" >
           <template slot="avatar" slot-scope="avatar">
-            <a-avatar :src="`${fileServer}/${avatar}`"/>
+            <a-avatar size="small" :src="`${fileServer}/${avatar}`"/>
           </template>
           <template slot="state" slot-scope="state">
             <a-badge v-if="state === '0'" status="success" />
@@ -26,13 +26,13 @@
           <template slot="action" slot-scope="record">
             <div class="row-operations">
               <a-tooltip v-action:sysUser:toggle :title=" record.state==='0'?'启用':'禁用' ">
-                <a-switch :size="rowBtnSize" :checked="record.state === '0'" @change="toggleState(record)" />
+                <a-switch size="small" :checked="record.state === '0'" @change="toggleState(record)" />
               </a-tooltip>
-              <a-button class="rowBtn" :size="rowBtnSize" type="link" v-action:sysUser:update @click="handleEdit(record)">编辑</a-button>
+              <a-button class="rowBtn" size="small" type="link" v-action:sysUser:update @click="handleEdit(record)">编辑</a-button>
               <a-button
                 class="rowBtn"
                 type="link"
-                :size="rowBtnSize"
+                size="small"
                 v-action:sysUser:configRoles
                 @click="handleConfigRoles(record.id)">配置角色</a-button>
               <a-popconfirm
@@ -47,7 +47,7 @@
                 <a-button
                   class="rowBtn"
                   type="link"
-                  :size="rowBtnSize"
+                  size="small"
                 >重置密码</a-button>
               </a-popconfirm>
               <a-popconfirm
@@ -62,7 +62,7 @@
                 <a-button
                   class="rowBtn"
                   type="link"
-                  :size="rowBtnSize">删除</a-button>
+                  size="small">删除</a-button>
               </a-popconfirm>
             </div>
           </template>
@@ -154,7 +154,6 @@ export default {
     return {
       description: '',
       form: this.$form.createForm(this),
-      rowBtnSize: 'small',
       loading: false,
       columns: [
         { title: '状态', dataIndex: 'state', align: 'center', scopedSlots: { customRender: 'state' } },
