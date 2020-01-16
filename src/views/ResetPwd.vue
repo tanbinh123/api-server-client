@@ -64,7 +64,7 @@
           placeholder="确认密码"
           v-decorator="['confirmPassword',{validateFirst: true, rules: [{ required: true, message: '请输入确认密码' },
                                                                         {validator: handleConfirmPassword}],
-                                                                         validateTrigger: ['change', 'blur']} ]"
+                                           validateTrigger: ['change', 'blur']} ]"
         >
           <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
         </a-input-password>

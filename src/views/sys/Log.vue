@@ -40,9 +40,9 @@
     >
       <a-row>
         <a-row :span="24" class="label">Class:</a-row>
-        <a-row :span="24" class="value">{{detail.classMethod}}</a-row>
+        <a-row :span="24" class="value">{{ detail.classMethod }}</a-row>
         <a-row :span="24" class="label">参数: </a-row>
-        <a-row :span="24" class="value">{{detail.params}}</a-row>
+        <a-row :span="24" class="value">{{ detail.params }}</a-row>
         <a-row :span="24" class="label">响应: </a-row>
         <a-row :span="24" class="value">{{ detail.result }}</a-row>
       </a-row>

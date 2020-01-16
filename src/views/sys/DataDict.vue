@@ -49,7 +49,7 @@
       <template slot="action" slot-scope="record">
         <div class="row-operations">
           <a-tooltip v-action:sysDict:toggle :title=" record.state==='ON'?'启用':'禁用' " >
-            <a-switch  size="small" :checked="record.state === 'ON'" @change="toggleState(record)" />
+            <a-switch size="small" :checked="record.state === 'ON'" @change="toggleState(record)" />
           </a-tooltip>
           <a-button
             v-action:sysDict:add

@@ -123,7 +123,8 @@ export default {
   },
   props: {
     searchFields: {
-      type: Array
+      type: Array,
+      required: true
     },
     pmd: {
       // 每个搜索框宽度(md) 只能取 6，8 ，12

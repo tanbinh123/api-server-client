@@ -13,7 +13,7 @@
       @pressEnter="handleTagInputConfirm"
     />
     <a-tag v-else @click="showInput" style="background: #fff; borderStyle: dashed;">
-      <a-icon type="plus" /> {{btnText}}
+      <a-icon type="plus" /> {{ btnText }}
     </a-tag>
   </div>
 </template>

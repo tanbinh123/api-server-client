@@ -15,7 +15,7 @@
       :beforeUpload="handleBeforeUpload"
       @change="handleUploadChange"
     >
-      <img v-if="imgPath" :src="`${this.fileServer}/${imgPath}`"  :style="{ width: '100%' }" alt="upload image"/>
+      <img v-if="imgPath" :src="`${this.fileServer}/${imgPath}`" :style="{ width: '100%' }" alt="upload image"/>
       <div v-else>
         <a-icon :type="loading? 'loading' : 'plus'"/>
         <div class="ant-upload-text">上传</div>
@@ -51,7 +51,8 @@ export default {
       default: '图片'
     },
     imgPath: {
-      type: String
+      type: String,
+      default: ''
     },
     formItemLayout: {
       type: Object,

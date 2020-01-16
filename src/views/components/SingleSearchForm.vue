@@ -65,7 +65,7 @@
           </a-col>
           <a-col :md="device === deviceType.DESKTOP?4:6" :xs="24" >
             <span class="table-page-search-submitButtons">
-              <a-button @click="handleSearch" type="primary"  >查询</a-button>
+              <a-button @click="handleSearch" type="primary" >查询</a-button>
               <a-button @click="handleReset" >重置</a-button>
             </span>
           </a-col>
@@ -95,7 +95,8 @@ export default {
   },
   props: {
     searchFields: {
-      type: Array
+      type: Array,
+      required: true
     }
   },
   computed: {

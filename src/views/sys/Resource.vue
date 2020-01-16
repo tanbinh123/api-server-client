@@ -2,7 +2,7 @@
   <a-card :bordered="false">
     <single-search-form :searchFields="searchFields" @search="handleSearchEvent">
       <template #head>
-        <a-button  v-action:sysResource:add type="primary"  icon="plus"  @click="handleAdd">新增</a-button>
+        <a-button v-action:sysResource:add type="primary" icon="plus" @click="handleAdd">新增</a-button>
       </template>
     </single-search-form>
     <a-table
