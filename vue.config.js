@@ -41,7 +41,6 @@ const vueConfig = {
   },
 
   chainWebpack: (config) => {
-    // 起别名
     config.resolve.alias.set('@$', resolve('src'))
 
     // 配置两种svg 图标引用方式
@@ -80,7 +79,6 @@ const vueConfig = {
           // 'link-color': '#F5222D',
           // 'border-radius-base': '4px'
         },
-        // do not remove this line
         javascriptEnabled: true
       }
     }
@@ -104,10 +102,9 @@ const vueConfig = {
   transpileDependencies: []
 }
 
-// preview.pro.loacg.com only do not use in your production;
+// VUE_APP_PREVIEW 变量开启，加载 颜色设置插件
 if (process.env.VUE_APP_PREVIEW === 'true') {
   console.log('VUE_APP_PREVIEW', true)
-  // add `ThemeColorReplacer` plugin to webpack plugins
   vueConfig.configureWebpack.plugins.push(createThemeColorReplacerPlugin())
 }
 

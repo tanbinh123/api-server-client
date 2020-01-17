@@ -12,7 +12,7 @@ import {
   DEFAULT_FIXED_SIDEMENU,
   DEFAULT_CONTENT_WIDTH_TYPE
 } from '@/store/mutation-types'
-import config from '@/config/defaultSettings'
+import config from './default-settings'
 
 export default function Initializer () {
   console.log(`API_URL: ${process.env.VUE_APP_API_BASE_URL}`)

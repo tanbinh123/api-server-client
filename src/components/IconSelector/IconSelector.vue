@@ -61,8 +61,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  @import "../index.less";
-
+  @import "~@/assets/style/ant-design-vue.less";
   ul{
     list-style: none;
     padding: 0;

@@ -10,7 +10,7 @@
 <script>
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import { AppDeviceEnquire } from '@/utils/mixin'
-import Interval from '@/views/components/Interval'
+import Interval from '@/components/Service/Interval'
 
 export default {
   name: 'App',

@@ -1,15 +1,16 @@
 import Vue from 'vue'
 import VueStorage from 'vue-ls'
-import config from '@/config/defaultSettings'
+import config from './default-settings'
 
 // base library
-import '@/core/lazy_lib/components_use'
+import './components_use'
+// 图表
 import Viser from 'viser-vue'
 
 // ext library
 import VueClipboard from 'vue-clipboard2'
-import PageLoading from '@/components/PageLoading'
-import './directives/action'
+import PageLoading from '@/components/Tool/PageLoading'
+import './directives/permission'
 
 VueClipboard.config.autoSetContainer = true
 

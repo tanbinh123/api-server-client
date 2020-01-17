@@ -30,13 +30,13 @@ export const constantRouterMap = [
       {
         path: '/login',
         name: 'Login',
-        component: () => import(/* webpackChunkName: "login" */ '@/views/Login'),
+        component: () => import(/* webpackChunkName: "login" */ '@/views/login'),
         meta: { title: '用户登录' }
       },
       {
         path: '/resetPwd',
         name: 'ResetPwd',
-        component: () => import(/* webpackChunkName: "resetPwd" */ '@/views/ResetPwd'),
+        component: () => import(/* webpackChunkName: "resetPwd" */ '@/views/reset-pwd'),
         meta: { title: '重置密码' }
       }
     ]
@@ -49,7 +49,7 @@ export const constantRouterMap = [
       {
         path: '/profile',
         name: 'Profile',
-        component: () => import(/* webpackChunkName: "profile" */'@/views/profile/Index'),
+        component: () => import(/* webpackChunkName: "profile" */'@/views/profile/index'),
         meta: { title: '个人面板' },
         redirect: '/profile/info',
         hidden: true,
@@ -57,31 +57,31 @@ export const constantRouterMap = [
           {
             path: '/profile/info',
             name: 'InfoSettings',
-            component: () => import(/* webpackChunkName: "infoSettings" */ '@/views/profile/Info'),
+            component: () => import(/* webpackChunkName: "infoSettings" */ '@/views/profile/info'),
             meta: { title: '基本信息' }
           },
           {
             path: '/profile/pwd',
             name: 'PwdReset',
-            component: () => import(/* webpackChunkName: "pwdReset" */ '@/views/profile/Pwd'),
+            component: () => import(/* webpackChunkName: "pwdReset" */ '@/views/profile/pwd'),
             meta: { title: '密码重置' }
           },
           {
             path: '/profile/log',
             name: 'UserLog',
-            component: () => import(/* webpackChunkName: "userLog" */ '@/views/profile/Log'),
+            component: () => import(/* webpackChunkName: "userLog" */ '@/views/profile/log'),
             meta: { title: '操作日志' }
           },
           {
             path: '/profile/msg-unread',
             name: 'MsgUnread',
-            component: () => import(/* webpackChunkName: "msgUnread" */ '@/views/profile/MsgUnread'),
+            component: () => import(/* webpackChunkName: "msgUnread" */ '@/views/profile/msg-unread'),
             meta: { title: '未读消息' }
           },
           {
             path: '/profile/msg-read',
             name: 'MsgRead',
-            component: () => import(/* webpackChunkName: "msgRead" */ '@/views/profile/MsgRead'),
+            component: () => import(/* webpackChunkName: "msgRead" */ '@/views/profile/msg-read'),
             meta: { title: '已读消息' }
           }
         ]

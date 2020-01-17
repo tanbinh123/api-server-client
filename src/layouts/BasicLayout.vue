@@ -62,13 +62,13 @@
 import { triggerWindowResizeEvent } from '@/utils/util'
 import { mapState, mapActions } from 'vuex'
 import { mixin, mixinDevice } from '@/utils/mixin'
-import config from '@/config/defaultSettings'
+import config from '@/core/default-settings'
 
 import RouteView from './RouteView'
-import SideMenu from '@/components/Menu/SideMenu'
-import GlobalHeader from '@/components/GlobalHeader'
-import GlobalFooter from '@/components/GlobalFooter'
-import SettingDrawer from '@/components/SettingDrawer'
+import SideMenu from './components/Menu/SideMenu'
+import GlobalHeader from './components/GlobalHeader'
+import GlobalFooter from './components/GlobalFooter'
+import SettingDrawer from './components/Setting'
 
 export default {
   name: 'BasicLayout',

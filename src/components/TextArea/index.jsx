@@ -1,8 +1,8 @@
 import './style.less'
-import { getStrFullLength, cutStrByFullLength } from '../_util/util'
+import { getStrFullLength, cutStrByFullLength } from '@/utils/util'
 import Input from 'ant-design-vue/es/input'
 const TextArea = Input.TextArea
-
+// textarea 输入框, 能限制字数
 export default {
   name: 'LimitTextArea',
   model: {

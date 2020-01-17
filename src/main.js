@@ -10,15 +10,16 @@ import { VueAxios } from './utils/request'
 
 import bootstrap from './core/bootstrap'
 import './core/lazy_use'
-import './permission' // permission control
+import './core/router-guards' // 路由守卫
 import './utils/filter' // global filter
-import './components/global.less'
-
+import './assets/style/global.less'
+import { checkPermission } from './utils/util'
 Vue.config.productionTip = false
 
 Vue.use(VueAxios)
 
 // 文件服务器地址
+Vue.prototype.checkPermission = checkPermission
 Vue.prototype.fileServer = 'http://127.0.0.1:8888/v1'
 Vue.prototype.tableSize = 'middle'
 
